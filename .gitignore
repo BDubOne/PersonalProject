@@ -1,4 +1,5 @@
 raw-data
+.experimental
 .venv
 .env
 __pycache__

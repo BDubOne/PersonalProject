@@ -31,6 +31,15 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 CORS_ALLOW_ALL_ORIGINS = True
+# ALLOWED_HOSTS = ["0.0.0.0"]
+
+# CORS_ALLOWED_ORIGINS = ["0.0.0.0"]
+
+# CORS_ALLOW_CREDENTIALS = True
+
+# SESSION_COOKIE_SECURE = True
+
+# SESSION_COOKIE_HTTPONLY = True
 
 
 # Application definition
@@ -44,6 +53,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
+    'requests',
     'corsheaders',
     'noun_proj_app',
     'global_dict_app',
@@ -52,6 +62,7 @@ INSTALLED_APPS = [
     'words_app',
     'numbers_app',
     'translator_app',
+    'dict_entry_app',
 ]
 
 MIDDLEWARE = [
@@ -137,5 +148,14 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+REST_FRAMEWORK = {
+       'DEFAULT_AUTHENTICATION_CLASSES': [
+           'rest_framework.authentication.TokenAuthentication',
+       ],
+   }
+
+AUTH_USER_MODEL = 'student_app.Student'
 
 env=dotenv_values(".env")
