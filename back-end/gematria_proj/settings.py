@@ -56,8 +56,6 @@ INSTALLED_APPS = [
     'requests',
     'corsheaders',
     'noun_proj_app',
-    'global_dict_app',
-    'personal_dict_app',
     'student_app',
     'words_app',
     'numbers_app',
