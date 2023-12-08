@@ -10,14 +10,11 @@ import Button from 'react-bootstrap/Button'
 
 function NavBar({ user, setUser }) {
     const navigate = useNavigate()
-    const logOut= async () => {
-        try{
-            await API.post('users/logout/');        
-            setUser(null);
-            navigate('/');    
-        } catch (error) {
-            console.error("error logging out", error);
-        }
+    const logOut= () => {
+        localStorage.removeItem("token");
+        delete API.defaults.headers.common["Authorization"];
+        setUser(null);
+        navigate('/');
     };
     
   return (
@@ -30,11 +27,10 @@ function NavBar({ user, setUser }) {
             <Link to="/">Home</Link>
                 {user ? (
                     <>
-                
-                        <Link to="global-dictionary/">Global Dictionary</Link>
-                        <Link to="personal-dictionary/">Personal Dictionary</Link>
-                        <Link to="lvx-calculator/">LVX Calculator</Link>
-                        <Link to="about/">About</Link>
+                        <Nav.Link><Link to="global-dictionary/">Global Dictionary</Link></Nav.Link>
+                        <Nav.Link><Link to="personal-dictionary/">Personal Dictionary</Link></Nav.Link>
+                        <Nav.Link><Link to="lvx-calculator/">LVX Calculator</Link></Nav.Link>
+                        <Nav.Link><Link to="about/">About</Link></Nav.Link>
                         <Button onClick = {logOut} variant="danger">
                             Log Out
                         </Button>

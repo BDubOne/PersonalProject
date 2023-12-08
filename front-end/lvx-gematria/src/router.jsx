@@ -1,7 +1,9 @@
 import { createBrowserRouter } from "react-router-dom"
 import App from "./App";
 
-import { GlobalDictionary } from './pages/GlobalDictionary';
+import  GlobalDictionary  from './pages/GlobalDictionary';
+import GlobalDetails from './pages/GlobalDetails';
+import PersonalDetails from './pages/PersonalDetails';
 import { Home } from './pages/Home';
 import { PersonalDictionary } from './pages/PersonalDictionary';
 import { RegisterPage } from "./pages/RegisterPage";
@@ -27,8 +29,17 @@ const router = createBrowserRouter([
                 element: <GlobalDictionary/>,
             },
             {
+                path: "global-dictionary/:number",
+                element: <GlobalDetails/>,
+            },
+            {
                 path: "personal-dictionary/",
                 element: <PersonalDictionary />,
+
+            },
+            {
+                path: "personal-dictionary/:number",
+                element: <PersonalDetails />,
 
             },
             {

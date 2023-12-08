@@ -23,8 +23,21 @@ class DictionaryEntrySerializer(serializers.ModelSerializer):
         fields = ['id', 'number', 'description', 'key_words', 'related_entries']
 
     def get_related_entries(self, obj):
-        related_entries = RelatedEntry.objects.filter(from_entry=obj)
-        return RelatedEntrySerializer(related_entries, many=True).data
+        # Get related entries where current object is 'from_entry'
+        from_related_numbers = RelatedEntry.objects.filter(
+            from_entry=obj
+        ).values_list('to_entry__number', flat=True)
+
+        # Get related entries where current object is 'to_entry'
+        to_related_numbers = RelatedEntry.objects.filter(
+            to_entry=obj
+        ).values_list('from_entry__number', flat=True)
+
+        # Combine and deduplicate the numbers, excluding the current object's number
+        related_numbers = set(list(from_related_numbers) + list(to_related_numbers))
+        related_numbers.discard(obj.number)
+
+        return list(related_numbers)
 
     def create(self, validated_data):
         # Normal creation of DictionaryEntry
@@ -113,8 +126,21 @@ class PersonalDictionaryEntrySerializer(serializers.ModelSerializer):
         extra_kwargs = {'global_entry': {'write_only': True}}
 
     def get_personal_related_entries(self, obj):
-        personal_related_entries = PersonalRelatedEntry.objects.filter(from_personal_entry=obj)
-        return PersonalRelatedEntrySerializer(personal_related_entries, many=True).data
+    # Get numbers where the current object is 'from_personal_entry'
+        from_related_numbers = PersonalRelatedEntry.objects.filter(
+            from_personal_entry=obj
+        ).values_list('to_personal_entry__number', flat=True)
+
+    # Get numbers where the current object is 'to_personal_entry'
+        to_related_numbers = PersonalRelatedEntry.objects.filter(
+            to_personal_entry=obj
+        ).values_list('from_personal_entry__number', flat=True)
+
+    # Combine and deduplicate the numbers, excluding the current object's number
+        related_numbers = set(list(from_related_numbers) + list(to_related_numbers))
+        related_numbers.discard(obj.number)
+
+        return list(related_numbers)
 
     def create(self, validated_data):
         personal_related_entries_data = self.initial_data.get('personal_related_entries', [])
