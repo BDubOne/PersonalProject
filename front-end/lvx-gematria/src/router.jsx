@@ -5,7 +5,7 @@ import  GlobalDictionary  from './pages/GlobalDictionary';
 import GlobalDetails from './pages/GlobalDetails';
 import PersonalDetails from './pages/PersonalDetails';
 import { Home } from './pages/Home';
-import { PersonalDictionary } from './pages/PersonalDictionary';
+import PersonalDictionary from './pages/PersonalDictionary';
 import { RegisterPage } from "./pages/RegisterPage";
 import { CalculatorPage } from "./pages/CalculatorPage";
 import { NotFoundPage } from "./pages/NotFoundPage";

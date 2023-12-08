@@ -33,6 +33,7 @@ class GlobalDictionaryDetail(generics.RetrieveUpdateAPIView):
             return Response(status=status.HTTP_404_NOT_FOUND)
     
     def post(self, request, *args, **kwargs):
+        
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
