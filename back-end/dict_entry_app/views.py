@@ -1,8 +1,9 @@
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from .models import DictionaryEntry, PersonalDictionaryEntry
-from .serializers import DictionaryEntrySerializer, PersonalDictionaryEntrySerializer
+from .serializers import DictionaryEntrySerializer, RelatedEntry, PersonalRelatedEntry, PersonalDictionaryEntrySerializer
 from django.shortcuts import get_object_or_404
+from django.http import JsonResponse
 
 class GlobalDictionaryList(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -12,13 +13,24 @@ class GlobalDictionaryList(generics.ListAPIView):
 class GlobalDictionaryDetail(generics.RetrieveUpdateAPIView):
     queryset = DictionaryEntry.objects.all()
     serializer_class = DictionaryEntrySerializer
-    lookup_field = 'number'  # Configure the view to use 'number' instead of 'pk'
-    permission_classes = [permissions.IsAuthenticated]  # Requires users to be authenticated
+    lookup_field = 'number'
+    permission_classes = [permissions.IsAuthenticated]
 
-    def get_object(self):
-        # Override get_object to retrieve by number
+    def retrieve(self, request, *args, **kwargs):
         number = self.kwargs.get('number')
-        return get_object_or_404(DictionaryEntry, number=number)
+        entries = DictionaryEntry.objects.filter(number=number)
+
+        # If there's more than one entry, handle accordingly
+        if entries.count() > 1:
+            serializer = self.get_serializer(entries, many=True)
+            return Response(serializer.data)
+        elif entries.exists():
+            # If only one entry is found, behave as usual
+            serializer = self.get_serializer(entries.first())
+            return Response(serializer.data)
+        else:
+            # No entries found
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
     def delete(self, request, *args, **kwargs):
         # Ensure that only superusers can delete entries
@@ -36,8 +48,8 @@ class GlobalDictionaryQuery(generics.ListAPIView):
         queryset = DictionaryEntry.objects.all()
 
         if query.isdigit():
-            # Query is a number, filter by related entry number
-            queryset = queryset.filter(related_entries__number=int(query))
+            related_entries = RelatedEntry.objects.filter(to_entry__number=int(query)).values_list('from_entry__number', flat=True)
+            queryset = queryset.filter(number__in=related_entries)
         else:
             # Query is a string, filter by keyword
             queryset = queryset.filter(key_words__contains=[query])
@@ -73,9 +85,8 @@ class PersonalDictionaryQuery(generics.ListAPIView):
 
         if query.isdigit():
             # Query is a number, filter by personal related entry number
-            personal_related_entry = PersonalDictionaryEntry.objects.filter(number=int(query), student=self.request.user).first()
-            if personal_related_entry:
-                queryset = queryset.filter(personal_related_entries=personal_related_entry)
+            related_entries = PersonalRelatedEntry.objects.filter(to_personal_entry__number=int(query), from_personal_entry__student=self.request.user).values_list('from_personal_entry__number', flat=True)
+            queryset = queryset.filter(number__in=related_entries)
         else:
             # Query is a string, filter by personal keyword
             queryset = queryset.filter(personal_key_words__contains=[query])
