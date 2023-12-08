@@ -31,6 +31,12 @@ class GlobalDictionaryDetail(generics.RetrieveUpdateAPIView):
         else:
             # No entries found
             return Response(status=status.HTTP_404_NOT_FOUND)
+    
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def delete(self, request, *args, **kwargs):
         # Ensure that only superusers can delete entries
@@ -66,6 +72,7 @@ class PersonalDictionaryList(generics.ListCreateAPIView):
 class PersonalDictionaryDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = PersonalDictionaryEntrySerializer
     permission_classes = [permissions.IsAuthenticated]
+    lookup_field="number"
     
     def get_queryset(self):
         return PersonalDictionaryEntry.objects.filter(student=self.request.user)
@@ -73,7 +80,14 @@ class PersonalDictionaryDetail(generics.RetrieveUpdateDestroyAPIView):
     def perform_create(self, serializer):
         global_entry = get_object_or_404(DictionaryEntry, number=self.kwargs.get('number'))
         serializer.save(student=self.request.user, global_entry = global_entry)
+    
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(student=request.user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+    
 
 class PersonalDictionaryQuery(generics.ListAPIView):
     serializer_class = PersonalDictionaryEntrySerializer
