@@ -94,12 +94,7 @@ class DictionaryEntrySerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
-        # Update other fields as usual
-        for attr, value in validated_data.items():
-            setattr(instance, attr, value)
-
-        instance.save()
-        return instance
+     
     
 class PersonalRelatedEntrySerializer(serializers.ModelSerializer):
     to_entry_number = serializers.IntegerField(source='to_personal_entry.number')
@@ -121,7 +116,7 @@ class PersonalDictionaryEntrySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PersonalDictionaryEntry
-        fields = ['id', 'global_entry', 'global_number', 'global_description', 'global_key_words', 
+        fields = ['id', 'global_entry', 'global_number', 'global_description', 'global_key_words',
                   'number', 'personal_description', 'personal_key_words', 'personal_related_entries']
         extra_kwargs = {'global_entry': {'write_only': True}}
 

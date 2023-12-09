@@ -1,61 +1,77 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { API } from '../utilities/API';
-import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
+import ListGroup from 'react-bootstrap/ListGroup';
+import { UpdatePersonalEntry, DeletePersonalEntry } from '../utilities/personalDictionaryUtilities';
+// You may also import other components as needed
 
 function PersonalDetails() {
+  const [entry, setEntry] = useState(null);
+  const [loading, setLoading] = useState(true);
   const { number } = useParams();
   const navigate = useNavigate();
-  const [entry, setEntry] = useState(null);
-  const [descriptionIndex, setDescriptionIndex] = useState(0);
-  
+
   useEffect(() => {
     const fetchEntry = async () => {
-      const token = localStorage.getItem("userToken");
-      API.defaults.headers.common["Authorization"] = `Token ${token}`;
-      const response = await API.get(`/dictionary/${number}`);
-      setEntry(response.data);
+      setLoading(true);
+      try {
+        const response = await API.get(`/dictionary/personal/${number}`);
+        setEntry(response.data);
+      } catch (error) {
+        console.error('Error fetching entry:', error);
+        // Handle error appropriately
+      }
+      setLoading(false);
     };
 
     fetchEntry();
   }, [number]);
 
-  const handleAddToPersonal = async (type, item) => {
-    // Logic to add the item to the personal entry
-    // Check if a personal entry exists, if not, create one
-    // Then add the item (description, keyword, or related entry)
+  const handleUpdate = async (updatedData) => {
+    try {
+      await UpdatePersonalEntry(number, updatedData);
+    } catch(err) {
+      console.error("error updating", err)
+    }
+    // Implement the logic to update the entry
   };
 
-  const renderDescriptions = () => {
-    return entry.description.slice(descriptionIndex, descriptionIndex + 5).map((desc, idx) => (
-      <p key={idx}>
-        {desc}
-        <Button onClick={() => handleAddToPersonal('description', desc)}>Add to My Entry</Button>
-      </p>
-    ));
+  const handleDelete = async () => {
+    try {
+      await DeletePersonalEntry(number);
+      navigate('/personal-dictionary');
+    } catch (error) {
+      console.error("Error deleting entry:", error);
+    }
+    navigate('/personal-dictionary'); // Redirect after deletion
   };
 
-  if (!entry) {
-    return <div>Loading...</div>;
-  }
+  if (loading) return <div>Loading...</div>;
+
+  if (!entry) return <div>Entry not found.</div>;
 
   return (
-    <Card>
-      <Card.Body>
-        <Card.Title>Number {entry.number}</Card.Title>
-        <Card.Text>
-          <div>Descriptions:</div>
-          {renderDescriptions()}
-        </Card.Text>
-        <Button disabled={descriptionIndex <= 0} onClick={() => setDescriptionIndex(i => i - 5)}>Previous</Button>
-        <Button disabled={descriptionIndex + 5 >= entry.description.length} onClick={() => setDescriptionIndex(i => i + 5)}>Next</Button>
-        <div>Related Entries: {entry.related_entries.map((relEntry, idx) => (
-          <Link key={idx} to={`/dictionary/${relEntry}`}>{relEntry}</Link>
-        ))}</div>
-        {/* Similar functionality for keywords */}
-      </Card.Body>
-    </Card>
+    <div>
+    <h2>Personal Entry Details for Number {entry.number}</h2>
+    <p><strong>Description:</strong></p>
+    <ListGroup>
+      {entry.personal_description.map((desc, index) => (
+        <ListGroup.Item key={index}>{desc}</ListGroup.Item>
+      ))}
+    </ListGroup>
+    <p><strong>Key Words:</strong> {entry.personal_key_words.join(', ')}</p>
+    <p><strong>Related Entries:</strong></p>
+    <ListGroup>
+      {entry.personal_related_entries.map((relatedNumber, index) => (
+        <ListGroup.Item key={index} action onClick={() => navigate(`/personal-dictionary/${relatedNumber}`)}>
+          Number {relatedNumber}
+        </ListGroup.Item>
+      ))}
+    </ListGroup>
+    <Button variant="danger" onClick={handleDelete}>Delete Entry</Button>
+    {/* Add other functionalities as needed */}
+  </div>
   );
 }
 

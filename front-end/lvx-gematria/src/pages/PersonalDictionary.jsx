@@ -1,62 +1,81 @@
-import React, { useState, useEffect } from 'react';
-import { API } from '../utilities/API';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import NumberCard from '../components/NumberCard';
 import Button from 'react-bootstrap/Button';
+import { API } from '../utilities/API';
+import { DeletePersonalEntry } from '../utilities/personalDictionaryUtilities';
+import AddEntryForm from '../components/AddPersonalEntry';
 
 function PersonalDictionary() {
   const [entries, setEntries] = useState([]);
-  const [selectedEntry, setSelectedEntry] = useState(null);
+  const [showAddForm, setShowAddForm] = useState(false);
+  const navigate = useNavigate();
+
+  // Moved fetchPersonalEntries outside of useEffect
+  const fetchPersonalEntries = async () => {
+    const token = localStorage.getItem("userToken");
+    API.defaults.headers.common["Authorization"] = `Token ${token}`;
+    try {
+      const response = await API.get('dictionary/personal/');
+      setEntries(response.data.results);
+      console.log("Fetched entries:", response.data.results);
+    } catch (err) {
+      console.error("Error fetching personal dictionary:", err);
+      setEntries([]);
+    }
+  };
 
   useEffect(() => {
     fetchPersonalEntries();
   }, []);
 
-  const fetchPersonalEntries = async () => {
-    const token = localStorage.getItem("userToken");
-    API.defaults.headers.common["Authorization"] = `Token ${token}`;
-    const response = await API.get('/personal-dictionary/');
-    setEntries(response.data); // Adjust according to API response structure
+  const handleDelete = async (number) => {
+    await DeletePersonalEntry(number);
+    fetchPersonalEntries();
   };
 
-  const addEntry = async (newEntry) => {
-    // POST request to add new entry
+  const onSuccessAddEntry = () => {
+    fetchPersonalEntries();
+    window.location.reload();
+  }
+
+  const toggleAddForm = () => {
+    setShowAddForm(!showAddForm);
+  }
+
+  const renderEntries = () => {
+    return entries.map(entry => {
+      const descriptionItem = Array.isArray(entry.personal_description) && entry.personal_description.length > 0
+      ? entry.personal_description[0]
+      : 'No description available.';
+      const keyWords = Array.isArray(entry.personal_key_words) && entry.personal_key_words.length > 0
+      ? entry.personal_key_words
+      : ['No related entries'];
+      return (
+      <div key={entry.id}>
+        <NumberCard
+          number={entry.number}
+          descriptionItem={descriptionItem}
+          keyWords={keyWords}
+          dictionaryType="personal"
+        />
+        <Button variant="danger" onClick={() => handleDelete(entry.number)}>Delete Entry</Button>
+        <Button variant="secondary" onClick={() => navigate(`personal-dictionary/${entry.number}`)}>Details</Button>
+      </div>
+    )});
   };
 
-  const updateEntry = async (updatedEntry) => {
-    // PUT request to update an entry
-  };
-
-  const deleteEntry = async (entryId) => {
-    // DELETE request to delete an entry
-    fetchPersonalEntries(); // Refresh the list after deletion
-  };
-
-  const handleSelectEntry = (entry) => {
-    // Logic to handle selected entry (for update or delete)
-    setSelectedEntry(entry);
-  };
-
-  // Render a list of personal dictionary entries
   return (
     <div>
-      {entries.map(entry => (
-        <NumberCard
-          key={entry.id}
-          number={entry.number}
-          descriptionItem={entry.description[0] || 'No description available.'}
-          relatedWords={entry.related_entries || ['No related entries']}
-        />
-      ))}
-      {/* Add buttons or forms to handle add, update, and delete functionalities */}
-      <Button onClick={() => addEntry(/* entry data */)}>Add Entry</Button>
-      {selectedEntry && (
-        <>
-          <Button onClick={() => updateEntry(selectedEntry)}>Update Entry</Button>
-          <Button onClick={() => deleteEntry(selectedEntry.id)}>Delete Entry</Button>
-        </>
-      )}
+      
+      <Button variant="primary" onClick={toggleAddForm}>
+        {showAddForm ? 'Hide Form' : 'Add New Entry'}
+      </Button>
+      {showAddForm && <AddEntryForm onSuccess={fetchPersonalEntries} />}
+      {entries.length > 0 ? renderEntries() : <p>No entries found.</p>}
     </div>
   );
 }
 
 export default PersonalDictionary;
+

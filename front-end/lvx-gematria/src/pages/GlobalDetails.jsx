@@ -47,6 +47,7 @@ function GlobalDetails() {
         <Card.Text>
           <div>Descriptions:</div>
           {renderDescriptions()}
+          <div> Key Words:<br/>{entry.key_words}</div>
         </Card.Text>
         <Button disabled={descriptionIndex <= 0} onClick={() => setDescriptionIndex(i => i - 5)}>Previous</Button>
         <Button disabled={descriptionIndex + 5 >= entry.description.length} onClick={() => setDescriptionIndex(i => i + 5)}>Next</Button>

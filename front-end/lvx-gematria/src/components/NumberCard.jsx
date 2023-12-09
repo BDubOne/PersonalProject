@@ -2,11 +2,12 @@ import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import { useNavigate } from 'react-router-dom';
 
-function NumberCard({ number, descriptionItem, keyWords }) {
+function NumberCard({ number, descriptionItem, keyWords, dictionaryType }) {
   const navigate = useNavigate();
 
   const navigateToDetails = () => {
-    navigate(`/global-dictionary/${number}`); // Replace with actual path to details page
+    const path = dictionaryType === 'personal' ? `/personal-dictionary/${number}` : `/global-dictionary/${number}`;
+    navigate(path);
   };
 
   // Handle the case where keyWords array is empty or undefined
