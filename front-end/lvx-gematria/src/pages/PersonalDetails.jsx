@@ -4,10 +4,12 @@ import { API } from '../utilities/API';
 import Button from 'react-bootstrap/Button';
 import ListGroup from 'react-bootstrap/ListGroup';
 import { UpdatePersonalEntry, DeletePersonalEntry } from '../utilities/personalDictionaryUtilities';
+import UpdateEntryForm from '../components/UpdatePersonalEntry';
 // You may also import other components as needed
 
 function PersonalDetails() {
   const [entry, setEntry] = useState(null);
+  const [ showUpdateForm, setShowUpdateForm] = useState(false)
   const [loading, setLoading] = useState(true);
   const { number } = useParams();
   const navigate = useNavigate();
@@ -28,14 +30,9 @@ function PersonalDetails() {
     fetchEntry();
   }, [number]);
 
-  const handleUpdate = async (updatedData) => {
-    try {
-      await UpdatePersonalEntry(number, updatedData);
-    } catch(err) {
-      console.error("error updating", err)
-    }
-    // Implement the logic to update the entry
-  };
+  const handleUpdate = () => {
+    setShowUpdateForm(true);
+  }
 
   const handleDelete = async () => {
     try {
@@ -46,6 +43,10 @@ function PersonalDetails() {
     }
     navigate('/personal-dictionary'); // Redirect after deletion
   };
+
+  const handleUpdateSuccess = () => {
+    setShowUpdateForm(false);
+  }
 
   if (loading) return <div>Loading...</div>;
 
@@ -63,14 +64,26 @@ function PersonalDetails() {
     <p><strong>Key Words:</strong> {entry.personal_key_words.join(', ')}</p>
     <p><strong>Related Entries:</strong></p>
     <ListGroup>
-      {entry.personal_related_entries.map((relatedNumber, index) => (
+      {entry.personal_related_entries_display.map((relatedNumber, index) => (
         <ListGroup.Item key={index} action onClick={() => navigate(`/personal-dictionary/${relatedNumber}`)}>
           Number {relatedNumber}
         </ListGroup.Item>
       ))}
     </ListGroup>
+    {!showUpdateForm && (
+    <>
+    <Button variant="secondary" onClick={handleUpdate}>Update Entry</Button>
     <Button variant="danger" onClick={handleDelete}>Delete Entry</Button>
     {/* Add other functionalities as needed */}
+
+    </>
+    )}
+    {showUpdateForm && (
+      <UpdateEntryForm 
+      entryNumber={number}
+      onUpdate={handleUpdateSuccess}
+      />
+    )}
   </div>
   );
 }

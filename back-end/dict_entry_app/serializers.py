@@ -16,44 +16,53 @@ class RelatedEntrySerializer(serializers.ModelSerializer):
         return value
 
 class DictionaryEntrySerializer(serializers.ModelSerializer):
-    related_entries = serializers.SerializerMethodField()
+    related_entries = serializers.ListField(
+        child=serializers.IntegerField(),
+        write_only=True
+    )
+    related_entries_display = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = DictionaryEntry
-        fields = ['id', 'number', 'description', 'key_words', 'related_entries']
+        fields = ['id', 'number', 'description', 'key_words', 'related_entries', 'related_entries_display']
 
-    def get_related_entries(self, obj):
-        # Get related entries where current object is 'from_entry'
-        from_related_numbers = RelatedEntry.objects.filter(
+    def get_related_entries_display(self, obj):
+        from_related_numbers = list(RelatedEntry.objects.filter(
             from_entry=obj
-        ).values_list('to_entry__number', flat=True)
+        ).values_list('to_entry__number', flat=True))
 
-        # Get related entries where current object is 'to_entry'
-        to_related_numbers = RelatedEntry.objects.filter(
+        to_related_numbers = list(RelatedEntry.objects.filter(
             to_entry=obj
-        ).values_list('from_entry__number', flat=True)
+        ).values_list('from_entry__number', flat=True))
 
         # Combine and deduplicate the numbers, excluding the current object's number
-        related_numbers = set(list(from_related_numbers) + list(to_related_numbers))
+        related_numbers = set(from_related_numbers + to_related_numbers)
         related_numbers.discard(obj.number)
-
         return list(related_numbers)
 
     def create(self, validated_data):
-        # Normal creation of DictionaryEntry
+        related_entries_data = validated_data.pop('related_entries', [])
         dictionary_entry = DictionaryEntry.objects.create(**validated_data)
 
-        # Handle related entries, if provided
-        related_entries_data = self.initial_data.get('related_entries', [])
-        for rel_entry in related_entries_data:
-            to_entry_number = rel_entry.get('to_entry')
-            to_entry = DictionaryEntry.objects.filter(number=to_entry_number).first()
-            if to_entry:
-                RelatedEntry.objects.create(from_entry=dictionary_entry, to_entry=to_entry)
-
+        for number in related_entries_data:
+            to_entry, _ = DictionaryEntry.objects.get_or_create(number=number)
+            RelatedEntry.objects.get_or_create(from_entry=dictionary_entry, to_entry=to_entry)
+        
         return dictionary_entry
 
     def update(self, instance, validated_data):
+        new_related_entries = validated_data.pop('related_entries', [])
+        existing_related_entries = set(RelatedEntry.objects.filter(from_entry=instance).values_list('to_entry__number', flat=True))
+
+        for number in new_related_entries:
+            if number in existing_related_entries:
+                # Remove the entry
+                to_entry = DictionaryEntry.objects.filter(number=number).first()
+                RelatedEntry.objects.filter(from_entry=instance, to_entry=to_entry).delete()
+            else:
+                # Add the entry
+                to_entry, _ = DictionaryEntry.objects.get_or_create(number=number)
+                RelatedEntry.objects.get_or_create(from_entry=instance, to_entry=to_entry)
         # Custom handling for 'description' field
         if 'description' in validated_data:
             new_descriptions = validated_data['description']
@@ -76,16 +85,7 @@ class DictionaryEntrySerializer(serializers.ModelSerializer):
                         instance.key_words.append(new_keyword)
             validated_data.pop('key_words', None)
         
-        if 'related_entries' in validated_data:
-            new_related_entries = validated_data.pop('related_entries', [])
-            if not isinstance(new_related_entries, list):
-                new_related_entries = [new_related_entries]
-
-            for related_entry_number in new_related_entries:
-                if instance.has_related_entry(related_entry_number):
-                    instance.remove_related_entry(related_entry_number)
-                else:
-                    instance.add_related_entry(related_entry_number)
+        
 
         # Update other fields as usual
         for attr, value in validated_data.items():
@@ -93,6 +93,7 @@ class DictionaryEntrySerializer(serializers.ModelSerializer):
 
         instance.save()
         return instance
+
 
      
     
@@ -107,47 +108,41 @@ class PersonalRelatedEntrySerializer(serializers.ModelSerializer):
         if not PersonalDictionaryEntry.objects.filter(number=value).exists():
             raise serializers.ValidationError("PersonalDictionaryEntry with the provided number does not exist.")
         return value
+    
                 
 class PersonalDictionaryEntrySerializer(serializers.ModelSerializer):
     global_number = serializers.IntegerField(source='global_entry.number', read_only=True)
     global_description = serializers.ReadOnlyField(source='global_entry.description')
     global_key_words = serializers.ReadOnlyField(source='global_entry.key_words')
-    personal_related_entries = serializers.SerializerMethodField()
+    personal_related_entries = serializers.ListField(
+        child=serializers.IntegerField(),
+        write_only=True
+    )
+    personal_related_entries_display = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = PersonalDictionaryEntry
         fields = ['id', 'global_entry', 'global_number', 'global_description', 'global_key_words',
-                  'number', 'personal_description', 'personal_key_words', 'personal_related_entries']
+                  'number', 'personal_description', 'personal_key_words', 'personal_related_entries', 'personal_related_entries_display']
         extra_kwargs = {'global_entry': {'write_only': True}}
 
-    def get_personal_related_entries(self, obj):
-    # Get numbers where the current object is 'from_personal_entry'
-        from_related_numbers = PersonalRelatedEntry.objects.filter(
-            from_personal_entry=obj
-        ).values_list('to_personal_entry__number', flat=True)
-
-    # Get numbers where the current object is 'to_personal_entry'
-        to_related_numbers = PersonalRelatedEntry.objects.filter(
-            to_personal_entry=obj
-        ).values_list('from_personal_entry__number', flat=True)
-
-    # Combine and deduplicate the numbers, excluding the current object's number
-        related_numbers = set(list(from_related_numbers) + list(to_related_numbers))
-        related_numbers.discard(obj.number)
-
-        return list(related_numbers)
+    def get_personal_related_entries_display(self, obj):
+        # Fetch related entries and return their numbers
+        related_entries = PersonalRelatedEntry.objects.filter(from_personal_entry=obj)
+        return [entry.to_personal_entry.number for entry in related_entries]
 
     def create(self, validated_data):
-        personal_related_entries_data = self.initial_data.get('personal_related_entries', [])
+        personal_related_entries_numbers = validated_data.pop('personal_related_entries', [])
         personal_entry = PersonalDictionaryEntry.objects.create(**validated_data)
-        
-        for rel_entry in personal_related_entries_data:
-            to_entry_number = rel_entry.get('to_entry_number')
-            to_entry = PersonalDictionaryEntry.objects.filter(number=to_entry_number).first()
-            if to_entry:
-                PersonalRelatedEntry.objects.create(from_personal_entry=personal_entry, to_personal_entry=to_entry)
 
+        for number in personal_related_entries_numbers:
+            to_entry, _ = PersonalDictionaryEntry.objects.get_or_create(student=personal_entry.student, number=number)
+            PersonalRelatedEntry.objects.get_or_create(from_personal_entry=personal_entry, to_personal_entry=to_entry)
+        
         return personal_entry
+        
+
+       
 
     def update(self, instance, validated_data):
         # Handling 'personal_description' field
@@ -173,22 +168,30 @@ class PersonalDictionaryEntrySerializer(serializers.ModelSerializer):
                     instance.personal_key_words.append(new_keyword)
 
         # Handling 'personal_related_entries' field
-        if 'personal_related_entries' in validated_data:
-            new_related_entries = validated_data.pop('personal_related_entries', [])
-            if not isinstance(new_related_entries, list):
-                new_related_entries = [new_related_entries]
-            for related_entry_number in new_related_entries:
-                if instance.has_personal_related_entry(related_entry_number):
-                    instance.remove_personal_related_entry(related_entry_number)
-                else:
-                    instance.add_personal_related_entry(related_entry_number)
+        new_related_entries = validated_data.pop('personal_related_entries', [])
+        
+        # Get existing related entries directly from the PersonalRelatedEntry model
+        existing_related_entries = set(PersonalRelatedEntry.objects.filter(from_personal_entry=instance).values_list('to_personal_entry__number', flat=True))
+
+        for number in new_related_entries:
+            if number in existing_related_entries:
+                # Remove the entry if it exists
+                to_entry = PersonalDictionaryEntry.objects.filter(student=instance.student, number=number).first()
+                if to_entry:
+                    PersonalRelatedEntry.objects.filter(from_personal_entry=instance, to_personal_entry=to_entry).delete()
+            else:
+                # Add the entry if it doesn't exist
+                to_entry, _ = PersonalDictionaryEntry.objects.get_or_create(student=instance.student, number=number)
+                PersonalRelatedEntry.objects.get_or_create(from_personal_entry=instance, to_personal_entry=to_entry)
 
         # Update other fields as usual
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
-
         instance.save()
+
         return instance
+    
+    
 
 
 

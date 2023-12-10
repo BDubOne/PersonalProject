@@ -51,7 +51,7 @@ function GlobalDetails() {
         </Card.Text>
         <Button disabled={descriptionIndex <= 0} onClick={() => setDescriptionIndex(i => i - 5)}>Previous</Button>
         <Button disabled={descriptionIndex + 5 >= entry.description.length} onClick={() => setDescriptionIndex(i => i + 5)}>Next</Button>
-        <div>Related Entries: {entry.related_entries.map((relEntry, idx) => (
+        <div>Related Entries: {entry.related_entries_display.map((relEntry, idx) => (
           <Link key={idx} to={`/global-dictionary/${relEntry}`}>{relEntry}</Link>
         ))}</div>
         {/* Similar functionality for keywords */}

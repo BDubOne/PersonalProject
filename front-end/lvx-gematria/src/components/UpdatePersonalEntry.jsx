@@ -10,6 +10,7 @@ function UpdateEntryForm({ entryNumber, onUpdate }) {
         personal_key_words: [],
         personal_related_entries: []
     });
+    const {user} = useOutletContext()
 
     useEffect(() => {
         const fetchEntry = async () => {
@@ -21,7 +22,7 @@ function UpdateEntryForm({ entryNumber, onUpdate }) {
                 setEntryData({
                     personal_description: response.data.personal_description.join(', '),
                     personal_key_words: response.data.personal_key_words.join(', '),
-                    personal_related_entries: response.data.personal_related_entries.join(', ')
+                    personal_related_entries_display: response.data.personal_related_entries_display.join(', ')
                 });
             } catch (error) {
                 console.error('Error fetching entry:', error);
@@ -38,19 +39,20 @@ function UpdateEntryForm({ entryNumber, onUpdate }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+    
         const formattedData = {
-            ...entryData,
-            personal_description: entryData.personal_description.split(',').map(desc => desc.trim()),
-            personal_key_words: entryData.personal_key_words.split(',').map(kw => kw.trim()),
+            number: entryNumber, // Assuming entryNumber is passed as a prop
+            personal_description: entryData.personal_description.split(',').map(desc => desc.trim()).filter(desc => desc),
+            personal_key_words: entryData.personal_key_words.split(',').map(kw => kw.trim()).filter(kw => kw),
             personal_related_entries: entryData.personal_related_entries.split(',').map(re => parseInt(re.trim())).filter(re => !isNaN(re))
         };
-
+    
         try {
             const token = localStorage.getItem("userToken");
             API.defaults.headers.common["Authorization"] = `Token ${token}`;
-
-            await API.put(`personal-dictionary/${entryNumber}/`, formattedData);
+    
+            const response = await API.put(`dictionary/personal/${entryNumber}/`, formattedData);
+            console.log("Entry updated:", response.data);
             onUpdate(); // Callback to refresh the list or handle post-update actions
         } catch (error) {
             console.error('Error updating entry:', error);

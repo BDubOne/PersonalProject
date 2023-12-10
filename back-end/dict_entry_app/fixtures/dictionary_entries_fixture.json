@@ -3,13 +3,14 @@
         "model": "dict_entry_app.dictionaryentry",
         "fields": {
             "number": 0,
-            "description": [
-                "Dummy description for entry 0"
-            ],
-            "key_words": [
-                "dummy",
-                "entry0"
-            ]
+            
+      "description": [
+        "rootless root of all creation"
+      ],
+      "key_words": [
+        "No-Thing",
+        "Superconsciousness"
+      ]
         },
         "pk": 1
     },

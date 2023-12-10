@@ -5,60 +5,38 @@ from .serializers import DictionaryEntrySerializer, RelatedEntry, PersonalRelate
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 
-class GlobalDictionaryList(generics.ListAPIView):
-    permission_classes = [permissions.IsAuthenticated]
-    queryset=DictionaryEntry.objects.all()
-    serializer_class = DictionaryEntrySerializer
 
-class GlobalDictionaryDetail(generics.RetrieveUpdateAPIView):
+class GlobalDictionaryList(generics.ListCreateAPIView):
+    queryset = DictionaryEntry.objects.all().order_by('number')
+    serializer_class = DictionaryEntrySerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def perform_create(self, serializer):
+        serializer.save()
+
+class GlobalDictionaryDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = DictionaryEntry.objects.all()
     serializer_class = DictionaryEntrySerializer
     lookup_field = 'number'
-    permission_classes = [permissions.IsAuthenticated]
 
-    def retrieve(self, request, *args, **kwargs):
-        number = self.kwargs.get('number')
-        entries = DictionaryEntry.objects.filter(number=number)
+    def get_permissions(self):
+        if self.request.method in ['PUT', 'DELETE']:
+            return [permissions.IsAdminUser()]
+        return [permissions.IsAuthenticated()]
 
-        # If there's more than one entry, handle accordingly
-        if entries.count() > 1:
-            serializer = self.get_serializer(entries, many=True)
-            return Response(serializer.data)
-        elif entries.exists():
-            # If only one entry is found, behave as usual
-            serializer = self.get_serializer(entries.first())
-            return Response(serializer.data)
-        else:
-            # No entries found
-            return Response(status=status.HTTP_404_NOT_FOUND)
-    
-    def post(self, request, *args, **kwargs):
-        
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-    def delete(self, request, *args, **kwargs):
-        # Ensure that only superusers can delete entries
-        if request.user.is_superuser:
-            return self.destroy(request, *args, **kwargs)
-        else:
-            return Response(status=status.HTTP_403_FORBIDDEN)
-        
 class GlobalDictionaryQuery(generics.ListAPIView):
     serializer_class = DictionaryEntrySerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
         query = self.kwargs.get('query')
-        queryset = DictionaryEntry.objects.all()
+        queryset = DictionaryEntry.objects.all().order_by('number')
 
         if query.isdigit():
             related_entries = RelatedEntry.objects.filter(to_entry__number=int(query)).values_list('from_entry__number', flat=True)
             queryset = queryset.filter(number__in=related_entries)
         else:
-            # Query is a string, filter by keyword
             queryset = queryset.filter(key_words__contains=[query])
         
         return queryset
