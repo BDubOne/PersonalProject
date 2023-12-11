@@ -4,9 +4,11 @@ from django.shortcuts import render
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework import permissions
 
 
 class DictApi(APIView):
+    
     def get(self, request, word):
         endpoint = f"https://api.dictionaryapi.dev/api/v2/entries/en/{word}"
         response = requests.get(endpoint)
