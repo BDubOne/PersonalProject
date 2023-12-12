@@ -3,6 +3,9 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { API } from '../utilities/API';
 import Button from 'react-bootstrap/Button';
 import ListGroup from 'react-bootstrap/ListGroup';
+import Container from 'react-bootstrap/Container'
+
+
 import { UpdatePersonalEntry, DeletePersonalEntry } from '../utilities/personalDictionaryUtilities';
 import UpdateEntryForm from '../components/UpdatePersonalEntry';
 // You may also import other components as needed
@@ -53,7 +56,7 @@ function PersonalDetails() {
   if (!entry) return <div>Entry not found.</div>;
 
   return (
-    <div>
+    <Container>
     <h2>Personal Entry Details for Number {entry.number}</h2>
     <p><strong>Description:</strong></p>
     <ListGroup>
@@ -84,7 +87,7 @@ function PersonalDetails() {
       onUpdate={handleUpdateSuccess}
       />
     )}
-  </div>
+  </Container>
   );
 }
 

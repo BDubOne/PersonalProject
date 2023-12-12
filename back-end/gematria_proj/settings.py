@@ -59,8 +59,8 @@ INSTALLED_APPS = [
     'student_app',
     'words_app',
     'numbers_app',
-    'translator_app',
     'dict_entry_app',
+    'translate_app'
 ]
 
 MIDDLEWARE = [

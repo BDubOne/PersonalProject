@@ -42,9 +42,9 @@ function UpdateEntryForm({ entryNumber, onUpdate }) {
     
         const formattedData = {
             number: entryNumber, // Assuming entryNumber is passed as a prop
-            personal_description: entryData.personal_description.split(',').map(desc => desc.trim()).filter(desc => desc),
-            personal_key_words: entryData.personal_key_words.split(',').map(kw => kw.trim()).filter(kw => kw),
-            personal_related_entries: entryData.personal_related_entries.split(',').map(re => parseInt(re.trim())).filter(re => !isNaN(re))
+            personal_description: entryData.personal_description ? entryData.personal_description.split(',').map(desc => desc.trim()).filter(desc => desc) : [],
+            personal_key_words: entryData.personal_key_words ? entryData.personal_key_words.split(',').map(kw => kw.trim()).filter(kw => kw) : [],
+            personal_related_entries: Array.isArray(entryData.personal_related_entries) ? entryData.personal_related_entries.map(re => parseInt(re.trim())).filter(re => !isNaN(re)) : []
         };
     
         try {

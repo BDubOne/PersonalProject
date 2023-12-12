@@ -6,6 +6,8 @@ import './App.css'
 
 import { API } from './utilities/API'
 
+import Container from 'react-bootstrap/Container';
+
 
 function App() {
   const [user, setUser] = useState(null);
@@ -31,8 +33,10 @@ function App() {
   return (
     <>
       <NavBar user={user} setUser={setUser} />
+      <Container>
       <h3>Welcome {user ? user.email : 'Guest'}</h3> {/* Assuming 'user' has an 'email' field */}
       <Outlet context={{ user, setUser }} />
+      </Container>
     </>
   );
 }

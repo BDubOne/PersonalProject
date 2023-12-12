@@ -1,16 +1,17 @@
 import { createBrowserRouter } from "react-router-dom"
 import App from "./App";
 
-import  GlobalDictionary  from './pages/GlobalDictionary';
+import GlobalDictionary  from './pages/GlobalDictionary';
 import GlobalDetails from './pages/GlobalDetails';
 import PersonalDetails from './pages/PersonalDetails';
 import PersonalDictionary from './pages/PersonalDictionary';
-import DictionarySearch from "./components/DictionarySearch"
+import DictionarySearch from "./components/DictionarySearch";
+import CalculatorPage from "./pages/CalculatorPage";
+import DictionaryQuery from "./pages/DictionaryQuery";
 
 
 import { Home } from './pages/Home';
 import { RegisterPage } from "./pages/RegisterPage";
-import { CalculatorPage } from "./pages/CalculatorPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
 
 const router = createBrowserRouter([
@@ -53,6 +54,21 @@ const router = createBrowserRouter([
             {
                 path: "dictionary-search/",
                 element: <DictionarySearch />,
+
+            },
+            {
+                path: "dictionary-query/",
+                element: <DictionaryQuery />,
+
+            },
+            {
+                path: "dictionary-query/:query/",
+                element: <DictionaryQuery />,
+
+            },
+            {
+                path: "dictionary-query/?query=:query/",
+                element: <DictionaryQuery />,
 
             },
         ],

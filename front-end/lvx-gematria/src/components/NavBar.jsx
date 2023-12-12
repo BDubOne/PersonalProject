@@ -3,6 +3,8 @@ import { Link } from "react-router-dom"
 import { API } from '../utilities/API'
 import { useNavigate } from 'react-router-dom'
 
+import SearchComponent from './SearchComponent'
+
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
@@ -30,7 +32,9 @@ function NavBar({ user, setUser }) {
                         <Nav.Link><Link to="global-dictionary/">Global Dictionary</Link></Nav.Link>
                         <Nav.Link><Link to="personal-dictionary/">Personal Dictionary</Link></Nav.Link>
                         <Nav.Link><Link to="lvx-calculator/">LVX Calculator</Link></Nav.Link>
-                        <Nav.Link><Link to="about/">About</Link></Nav.Link>
+                        <Nav.Link><Link to="dictionary-search/">Word/Number Search</Link></Nav.Link>
+                        
+                        
                         <Button onClick = {logOut} variant="danger">
                             Log Out
                         </Button>
@@ -40,6 +44,7 @@ function NavBar({ user, setUser }) {
             
             )}
           </Nav>
+          <SearchComponent /> {/* Add the SearchComponent here */}
         </Navbar.Collapse>
       </Container>
     </Navbar>

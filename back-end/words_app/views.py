@@ -4,7 +4,10 @@ from django.shortcuts import render
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import permissions
+from rest_framework import permissions, status
+
+
+
 
 
 class DictApi(APIView):
@@ -48,4 +51,6 @@ class DictApi(APIView):
                 data_to_send["meanings"].append(meaning_data)
         
         return Response(data_to_send)
+    
+
 

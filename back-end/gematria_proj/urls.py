@@ -23,4 +23,6 @@ urlpatterns = [
     path('api/v1/icons/', include('noun_proj_app.urls')),
     path('api/v1/words/', include('words_app.urls')),
     path('api/v1/dictionary/', include('dict_entry_app.urls')),
+    path('api/v1/numbers/', include('numbers_app.urls')),
+    path('api/v1/translate/', include('translate_app.urls'))
 ]

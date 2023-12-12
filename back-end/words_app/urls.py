@@ -3,6 +3,7 @@ from .views import DictApi
 
 
 urlpatterns = [
-    path('<str:word>/', DictApi.as_view(), name="dictionary_api")
+    path('<str:word>/', DictApi.as_view(), name="dictionary_api"),
+
     
 ]
