@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'requests',
+    'ratelimit',
     'corsheaders',
     'noun_proj_app',
     'student_app',

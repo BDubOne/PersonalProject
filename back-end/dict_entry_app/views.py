@@ -4,14 +4,17 @@ from .models import DictionaryEntry, PersonalDictionaryEntry
 from .serializers import DictionaryEntrySerializer, RelatedEntry, PersonalRelatedEntry, PersonalDictionaryEntrySerializer
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
+from django_ratelimit.decorators import ratelimit
 
 
-class GlobalDictionaryList(generics.ListCreateAPIView):
+class GlobalDictionaryList(generics.ListCreateAPIView):  
     queryset = DictionaryEntry.objects.all().order_by('number')
     serializer_class = DictionaryEntrySerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]    
+    @ratelimit(key='user', rate='100/h', method="GET", block=True)
+    @ratelimit(key='user', rate='1/w', method="POST", block=True)
     def perform_create(self, serializer):
+        
         serializer.save()
 
 class GlobalDictionaryDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -25,10 +28,11 @@ class GlobalDictionaryDetail(generics.RetrieveUpdateDestroyAPIView):
         return [permissions.IsAuthenticated()]
 
 
-class GlobalDictionaryQuery(generics.ListAPIView):
+class GlobalDictionaryQuery(generics.ListAPIView):   
     serializer_class = DictionaryEntrySerializer
     permission_classes = [permissions.IsAuthenticated]
-
+    
+    @ratelimit(key='user', rate='100/h', method="GET", block=True)
     def get_queryset(self):
         query = self.kwargs.get('query')
         queryset = DictionaryEntry.objects.all().order_by('number')
@@ -44,6 +48,8 @@ class GlobalDictionaryQuery(generics.ListAPIView):
 class PersonalDictionaryListCreate(generics.ListCreateAPIView):
     serializer_class = PersonalDictionaryEntrySerializer
     permission_classes = [permissions.IsAuthenticated]
+    @ratelimit(key='user', rate='100/h', method="GET", block=True)
+    @ratelimit(key='user', rate='5/d', method="POST", block=True)
 
     def get_queryset(self):
         return PersonalDictionaryEntry.objects.filter(student=self.request.user)
@@ -56,7 +62,8 @@ class PersonalDictionaryDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = PersonalDictionaryEntrySerializer
     permission_classes = [permissions.IsAuthenticated]
     lookup_field = "number"
-
+   
+    @ratelimit(key='user', rate='5/d', method="PUT", block=True)
     def get_queryset(self):
         return PersonalDictionaryEntry.objects.filter(student=self.request.user)
 
@@ -65,7 +72,8 @@ class PersonalDictionaryDetail(generics.RetrieveUpdateDestroyAPIView):
 class PersonalDictionaryQuery(generics.ListAPIView):
     serializer_class = PersonalDictionaryEntrySerializer
     permission_classes = [permissions.IsAuthenticated]
-
+    
+    @ratelimit(key='user', rate='100/h', method="GET", block=True)
     def get_queryset(self):
         query = self.kwargs.get('query')
         queryset = PersonalDictionaryEntry.objects.filter(student=self.request.user)
