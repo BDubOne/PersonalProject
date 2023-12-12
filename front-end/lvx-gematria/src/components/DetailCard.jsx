@@ -29,7 +29,7 @@ function DetailedCard({ number, descriptions, relatedEntries, keyWords, addDescr
           {descriptions.slice(descIndex, descIndex + 5).map((desc, index) => (
             <p key={index}>
               {desc}
-              <Button onClick={() => handleAddDescription(desc)}>Add to My Entry</Button>
+              <Button onClick={() => handleAddDescription(desc)}>Add to Personal Dictionary</Button>
             </p>
           ))}
         </Card.Text>

@@ -1,3 +1,4 @@
+from django.shortcuts import render
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from .models import DictionaryEntry, PersonalDictionaryEntry
@@ -5,14 +6,21 @@ from .serializers import DictionaryEntrySerializer, RelatedEntry, PersonalRelate
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 from django_ratelimit.decorators import ratelimit
+from django_ratelimit.core import get_usage, is_ratelimited
+
+
+def user_or_admin_key(group, request):
+    if request.user.is_staff:
+        return "admin"
+    return request.user.username
 
 
 class GlobalDictionaryList(generics.ListCreateAPIView):  
     queryset = DictionaryEntry.objects.all().order_by('number')
     serializer_class = DictionaryEntrySerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]    
-    @ratelimit(key='user', rate='100/h', method="GET", block=True)
-    @ratelimit(key='user', rate='1/w', method="POST", block=True)
+    # @ratelimit(key=user_or_admin_key, rate='30/h', method="GET", block=True)
+    # @ratelimit(key=user_or_admin_key, rate='1/w', method="POST", block=True)
     def perform_create(self, serializer):
         
         serializer.save()
@@ -22,6 +30,7 @@ class GlobalDictionaryDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = DictionaryEntrySerializer
     lookup_field = 'number'
 
+    # @ratelimit(key=user_or_admin_key, rate='30/h', method="GET", block=True)
     def get_permissions(self):
         if self.request.method in ['PUT', 'DELETE']:
             return [permissions.IsAdminUser()]
@@ -32,7 +41,7 @@ class GlobalDictionaryQuery(generics.ListAPIView):
     serializer_class = DictionaryEntrySerializer
     permission_classes = [permissions.IsAuthenticated]
     
-    @ratelimit(key='user', rate='100/h', method="GET", block=True)
+    # @ratelimit(key=user_or_admin_key, rate='30/h', method="GET", block=True)
     def get_queryset(self):
         query = self.kwargs.get('query')
         queryset = DictionaryEntry.objects.all().order_by('number')
@@ -48,8 +57,8 @@ class GlobalDictionaryQuery(generics.ListAPIView):
 class PersonalDictionaryListCreate(generics.ListCreateAPIView):
     serializer_class = PersonalDictionaryEntrySerializer
     permission_classes = [permissions.IsAuthenticated]
-    @ratelimit(key='user', rate='100/h', method="GET", block=True)
-    @ratelimit(key='user', rate='5/d', method="POST", block=True)
+    # @ratelimit(key=user_or_admin_key, rate='30/h', method="GET", block=True)
+    # @ratelimit(key=user_or_admin_key, rate='5/d', method="GET", block=True)
 
     def get_queryset(self):
         return PersonalDictionaryEntry.objects.filter(student=self.request.user)
@@ -63,7 +72,8 @@ class PersonalDictionaryDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [permissions.IsAuthenticated]
     lookup_field = "number"
    
-    @ratelimit(key='user', rate='5/d', method="PUT", block=True)
+    # @ratelimit(key=user_or_admin_key, rate='30/h', method="GET", block=True)
+    # @ratelimit(key=user_or_admin_key, rate='5/d', method="GET", block=True)
     def get_queryset(self):
         return PersonalDictionaryEntry.objects.filter(student=self.request.user)
 
@@ -73,7 +83,7 @@ class PersonalDictionaryQuery(generics.ListAPIView):
     serializer_class = PersonalDictionaryEntrySerializer
     permission_classes = [permissions.IsAuthenticated]
     
-    @ratelimit(key='user', rate='100/h', method="GET", block=True)
+    # @ratelimit(key=user_or_admin_key, rate='30/h', method="GET", block=True)
     def get_queryset(self):
         query = self.kwargs.get('query')
         queryset = PersonalDictionaryEntry.objects.filter(student=self.request.user)

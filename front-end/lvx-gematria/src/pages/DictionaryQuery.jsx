@@ -35,7 +35,7 @@ function DictionaryQuery() {
       
         // Fetching data from global dictionary endpoint
         try {
-          const globalResponse = await API.get(`/dictionary/query/${queryParam}`);
+          const globalResponse = await API.get(`/dictionary/query/${queryParam}/`);
           if (globalResponse.status === 200 && globalResponse.data) {
             globalData = globalResponse.data.results;
           }

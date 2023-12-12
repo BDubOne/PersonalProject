@@ -11,12 +11,13 @@ from rest_framework.status import (
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import authenticate
+from django_ratelimit.decorators import ratelimit
+from django_ratelimit.core import get_usage, is_ratelimited
 
 # Create your views here.
 class SignUp(APIView):
     def post(self, request):
         request.data["username"] = request.data["email"]
-        # create_user comes from Django User model/AbstractUser, and, hashes the password for us
         student = Student.objects.create_user(**request.data)
         token = Token.objects.create(user=student)
         print(token)
@@ -43,7 +44,9 @@ class LogIn(APIView):
 class LogOut(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
-
+    
+    @ratelimit(key='user', method='POST', rate='5/m')
+    @ratelimit(key='user', method='POST', rate='30/h')
     def post(self, request):
         request.user.auth_token.delete()
         return Response(status=HTTP_204_NO_CONTENT)

@@ -122,8 +122,8 @@ const handleCheckboxChange = (type, item, isChecked) => {
   
 
   return (
-    <Container>
-      <Form onSubmit={handleSubmit}>
+    <Container >
+      <Form onSubmit={handleSubmit} id='wordsearch-form'>
         <InputGroup className="mb-3">
           <FormControl
             placeholder="Enter a word"
@@ -140,7 +140,7 @@ const handleCheckboxChange = (type, item, isChecked) => {
           <Button variant="primary" type="submit">Search</Button>
         </InputGroup>
       </Form>
-
+      <div className="scrollable-container">
       {dictionaryData && (
         <Card>
           <Card.Body>
@@ -166,6 +166,7 @@ const handleCheckboxChange = (type, item, isChecked) => {
         </Card.Body>
       </Card>
     )}
+    </div>
     </Container>
 
   );

@@ -19,8 +19,7 @@ function TranslateComponent() {
         "es": "Spanish",
         "he": "Hebrew",
         "la": "Latin",
-        "el": "Greek",
-        "sa": "Sanskrit"
+        "el": "Greek"
       
     };
 

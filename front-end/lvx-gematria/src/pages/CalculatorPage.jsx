@@ -8,6 +8,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
 import TranslateComponent from '../components/TranslateComponent';
+import DictionarySearch from '../components/DictionarySearch';
 
 
 
@@ -26,9 +27,15 @@ const LanguageSection = ({ languageName, characters, onCharacterClick }) => {
   );
 };
 
+
 const CalculatorPage = () => {
   const [inputValue, setInputValue] = useState('');
   const [sum, setSum] = useState(0);
+  const[selectedNumber, setSelectedNumber] = useState(null)
+
+  const handleSelectedNumberChange = (number) => {
+    setSelectedNumber(number);
+  };
 
   const handleCharacterClick = (char) => {
     setInputValue(prev => prev + char);
@@ -71,9 +78,12 @@ const CalculatorPage = () => {
 
   return (
     <Container>
-        <TranslateComponent />
+      <div>
+      {selectedNumber && <GlobalDictionaryDetails number={selectedNumber} />}
+      </div>
+        <TranslateComponent />        
       <Row className="justify-content-center">
-        <Col md={8}>
+        <Col md={6}>
           <Card className="my-3">
             <Card.Body>
               <Form>
@@ -101,6 +111,11 @@ const CalculatorPage = () => {
               <LanguageSection languageName="Greek" characters={greekCharacters} onCharacterClick={handleCharacterClick} />
             </Col>
           </Row>
+        </Col>
+        <Col md={6}>
+          <DictionarySearch 
+          classname="scrollable-container"
+          onSelectedNumberChange={handleSelectedNumberChange} />
         </Col>
       </Row>
     </Container>

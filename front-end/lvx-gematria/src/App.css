@@ -1,1 +1,9 @@
+.scrollable-container {
+    max-height: 550px;
+    overflow-y: auto;  /* Enables vertical scrolling if content overflows */
+  }
+
+#wordsearch-form {
+    margin-top:2.5%;
+}
 

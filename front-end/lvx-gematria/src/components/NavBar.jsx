@@ -31,9 +31,7 @@ function NavBar({ user, setUser }) {
                     <>
                         <Nav.Link><Link to="global-dictionary/">Global Dictionary</Link></Nav.Link>
                         <Nav.Link><Link to="personal-dictionary/">Personal Dictionary</Link></Nav.Link>
-                        <Nav.Link><Link to="lvx-calculator/">LVX Calculator</Link></Nav.Link>
-                        <Nav.Link><Link to="dictionary-search/">Word/Number Search</Link></Nav.Link>
-                        
+                        <Nav.Link><Link to="lvx-calculator/">LVX Calculator</Link></Nav.Link>                       
                         
                         <Button onClick = {logOut} variant="danger">
                             Log Out
@@ -44,7 +42,7 @@ function NavBar({ user, setUser }) {
             
             )}
           </Nav>
-          <SearchComponent /> {/* Add the SearchComponent here */}
+          <SearchComponent />
         </Navbar.Collapse>
       </Container>
     </Navbar>

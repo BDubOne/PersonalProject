@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
 import { API } from '../utilities/API';
 import { handleAddOrUpdateEntry } from '../utilities/handleAddOrUpdateEntry';
 import Container from 'react-bootstrap/Container';
@@ -8,9 +7,8 @@ import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 
-function GlobalDetails() {
-  const { number } = useParams();
-  const navigate = useNavigate();
+function GlobalDetails({number}) {
+ 
   const [entry, setEntry] = useState(null);
   const [descriptionIndex, setDescriptionIndex] = useState(0);
   
@@ -61,9 +59,11 @@ function GlobalDetails() {
         </Card.Text>
         <Button disabled={descriptionIndex <= 0} onClick={() => setDescriptionIndex(i => i - 5)}>Previous</Button>
         <Button disabled={descriptionIndex + 5 >= entry.description.length} onClick={() => setDescriptionIndex(i => i + 5)}>Next</Button>
-        <div>Related Entries: {entry.related_entries_display.map((relEntry, idx) => (
-          <Link key={idx} to={`/global-dictionary/${relEntry}`}>{relEntry}/ </Link>
-        ))}</div>
+        <ListGroup>Related Entries: {entry.related_entries_display.map((relEntry, idx) => (
+            <ListGroup.Item key={idx} action onClick={() => navigate(`global-dictionary/${relEntry}`)}>
+            Number {relatedNumber}
+          </ListGroup.Item>
+        ))}</ListGroup>
         {/* Similar functionality for keywords */}
       </Card.Body>
     </Card>    
