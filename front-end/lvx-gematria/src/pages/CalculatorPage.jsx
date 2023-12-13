@@ -7,6 +7,8 @@ import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
+import GlobalDetails from './GlobalDetails'
+import PersonalDetails from './PersonalDetails'
 import TranslateComponent from '../components/TranslateComponent';
 import DictionarySearch from '../components/DictionarySearch';
 
@@ -33,7 +35,7 @@ const CalculatorPage = () => {
   const [sum, setSum] = useState(0);
   const[selectedNumber, setSelectedNumber] = useState(null)
 
-  const handleSelectedNumberChange = (number) => {
+  const handleNumberSelect = (number) => {
     setSelectedNumber(number);
   };
 
@@ -78,10 +80,13 @@ const CalculatorPage = () => {
 
   return (
     <Container>
-      <div>
-      {selectedNumber && <GlobalDictionaryDetails number={selectedNumber} />}
+      <TranslateComponent />  
+      <div >
+      {selectedNumber && !isNaN(selectedNumber) && (
+            <GlobalDetails number={selectedNumber} />
+          )}
       </div>
-        <TranslateComponent />        
+              
       <Row className="justify-content-center">
         <Col md={6}>
           <Card className="my-3">
@@ -115,7 +120,7 @@ const CalculatorPage = () => {
         <Col md={6}>
           <DictionarySearch 
           classname="scrollable-container"
-          onSelectedNumberChange={handleSelectedNumberChange} />
+          onSelectedNumberChange={handleNumberSelect} />
         </Col>
       </Row>
     </Container>

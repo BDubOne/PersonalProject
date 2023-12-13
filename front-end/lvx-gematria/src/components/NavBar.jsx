@@ -42,7 +42,7 @@ function NavBar({ user, setUser }) {
             
             )}
           </Nav>
-          <SearchComponent />
+          {/* <SearchComponent /> */}
         </Navbar.Collapse>
       </Container>
     </Navbar>

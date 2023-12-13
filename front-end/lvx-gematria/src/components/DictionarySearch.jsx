@@ -10,7 +10,7 @@ import FormControl from 'react-bootstrap/FormControl';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Checkbox from 'react-bootstrap/FormCheck';
 
-function DictionarySearch() {
+function DictionarySearch({ onSelectedNumberChange }) {
   const [word, setWord] = useState('');
   const [number, setNumber] = useState('');
   const [dictionaryData, setDictionaryData] = useState(null);
@@ -45,6 +45,8 @@ function DictionarySearch() {
         setMathData(mathResponse.data.data);
         setTriviaData(triviaResponse.data.data);
         setDateData(dateResponse.data.data);
+        onSelectedNumberChange(number);
+        
       
       } catch (error) {
         console.error('Error fetching number facts:', error);
@@ -56,6 +58,8 @@ function DictionarySearch() {
     event.preventDefault();
     await fetchWordData();
     await fetchNumberFacts();
+    
+    
   };
   
     
