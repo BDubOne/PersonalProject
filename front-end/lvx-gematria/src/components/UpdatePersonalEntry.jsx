@@ -14,15 +14,25 @@ function UpdateEntryForm({ entryNumber, onUpdate }) {
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setEntryData({ ...entryData, [name]: value });
+        if (name === "personal_related_entries") {
+            const rEArrayValue = value.split(',').map(item => item.trim());
+            setEntryData({ ...entryData, [name]: rEArrayValue });
+        } else if(name ==="personal_key_words") {
+            const kWArrayValue = value.split(',').map(item => item.trim());
+            setEntryData({ ...entryData, [name]: kWArrayValue });
+        } else {
+            setEntryData({ ...entryData, [name]: value });
+        }
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
     
-        const personalDescription = entryData.personal_description != [] ? entryData.personal_description : [];
-        const personalKeyWords = entryData.personal_key_words != [] ? entryData.personal_key_words : [];    
-        const personalRelatedEntries = entryData.personal_related_entries != [] ? entryData.personal_related_entries : []
+        const personalDescription = entryData.personal_description.length > 0 ? entryData.personal_description : [];
+        const personalKeyWords = entryData.personal_key_words.length > 0 ? entryData.personal_key_words : [];    
+        const personalRelatedEntries = entryData.personal_related_entries.length > 0 
+        ? entryData.personal_related_entries.map(Number) 
+        : [];
 
         const formattedData = {
             number: entryNumber,
@@ -61,7 +71,7 @@ function UpdateEntryForm({ entryNumber, onUpdate }) {
                 <Form.Control
                     type="text"
                     name="personal_key_words"
-                    value={entryData.personal_key_words}
+                    value={entryData.personal_key_words.join(', ')}
                     onChange={handleInputChange}
                 />
             </Form.Group>
@@ -71,7 +81,7 @@ function UpdateEntryForm({ entryNumber, onUpdate }) {
                 <Form.Control
                     type="text"
                     name="personal_related_entries"
-                    value={entryData.personal_related_entries}
+                    value={entryData.personal_related_entries.join(', ')}
                     onChange={handleInputChange}
                 />
             </Form.Group>

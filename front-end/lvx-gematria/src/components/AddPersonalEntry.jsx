@@ -8,11 +8,11 @@ import Button from 'react-bootstrap/Button';
 function AddEntryForm() {
     const [entryData, setEntryData] = useState({
         number: '',
-        personal_description: "",
-        personal_key_words: "",
-        personal_related_entries: []
+        personal_description: '',
+        personal_key_words: '',
+        personal_related_entries: ''
     });
-    const { user } = useOutletContext()
+    const { user } = useOutletContext();
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -22,13 +22,12 @@ function AddEntryForm() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Prepare data for the POST request
         const formattedData = {
-            ...entryData,
             student_id: user.id,
-            personal_description: [entryData.personal_description], // Add the user's id
-            personal_key_words: entryData.personal_key_words.split(',').map(kw => kw.trim()),
-            personal_related_entries: [(entryData.personal_related_entries * 1)]
+            number: parseInt(entryData.number, 10),
+            personal_description: entryData.personal_description.split(',').map(item => item.trim()),
+            personal_key_words: entryData.personal_key_words.split(',').map(item => item.trim()),
+            personal_related_entries: entryData.personal_related_entries.split(',').map(Number)
         };
 
         try {
@@ -38,11 +37,9 @@ function AddEntryForm() {
             const response = await API.post('dictionary/personal/', formattedData);
             console.log("Entry added:", response.data);
             props.onSuccess();
-            setEntryData({ number: '', personal_description: '', personal_key_words: '', personal_related_entries: [] });
-            window.location.reload(); // Reset form after submission
+            setEntryData({ number: '', personal_description: '', personal_key_words: '', personal_related_entries: '' });
         } catch (error) {
             console.error("Error adding entry:", error);
-            console.log(formattedData)
         }
     };
 
@@ -79,7 +76,7 @@ function AddEntryForm() {
                 <Form.Control
                     type="text"
                     name="personal_key_words"
-                    value={entryData.personal_key_words}
+                    value={entryData.personal_key_words.join(', ')}
                     onChange={handleChange}
                     placeholder="Enter key words (comma-separated)"
                 />
@@ -91,7 +88,7 @@ function AddEntryForm() {
                 <Form.Control
                     type="text"
                     name="personal_related_entries"
-                    value={entryData.personal_related_entries}
+                    value={entryData.personal_related_entries.join(', ')}
                     onChange={handleChange}
                     placeholder="Enter related entry numbers (comma-separated)"
                 />

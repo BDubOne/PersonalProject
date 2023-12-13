@@ -33,13 +33,16 @@ function PersonalDictionary() {
   }, []);
 
   const handleDelete = async (number) => {
-    await DeletePersonalEntry(number);
-    fetchPersonalEntries();
-  };
-
+    try {
+        await DeletePersonalEntry(number);
+        console.log(`Entry with number ${number} deleted`);
+        setEntries(currentEntries => currentEntries.filter(entry => entry.number !== number));
+    } catch (error) {
+        console.error("Error deleting entry:", error);
+    }
+};
   const onSuccessAddEntry = () => {
     fetchPersonalEntries();
-    window.location.reload();
   }
 
   const toggleAddForm = () => {
@@ -69,7 +72,6 @@ function PersonalDictionary() {
             />
             <div className="d-flex justify-content-around mt-2">
               <Button variant="danger" onClick={() => handleDelete(entry.number)}>Delete</Button>
-              <Button variant="secondary" onClick={() => navigate(`personal-dictionary/${entry.number}`)}>Details</Button>
             </div>
           </Col>
         ))}

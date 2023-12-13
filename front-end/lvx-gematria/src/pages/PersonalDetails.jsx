@@ -16,6 +16,7 @@ function PersonalDetails({ number, onRelatedEntrySelect }) {
   const [entry, setEntry] = useState(null);
   const [ showUpdateForm, setShowUpdateForm] = useState(false)
   const [loading, setLoading] = useState(true);
+  const [updateTrigger, setUpdateTrigger] = useState(false);
   // const { number } = useParams();
   const navigate = useNavigate();
 
@@ -34,8 +35,8 @@ function PersonalDetails({ number, onRelatedEntrySelect }) {
       setLoading(false);
     };
 
-    fetchEntry();
-  }, [number]);
+    fetchEntry();    
+  }, [number, updateTrigger]);
 
   const handleUpdate = () => {
     setShowUpdateForm(true);
@@ -62,10 +63,10 @@ function PersonalDetails({ number, onRelatedEntrySelect }) {
     try {
       // await UpdatePersonalEntry();
       setShowUpdateForm(false);
+      setUpdateTrigger(!updateTrigger);
     } catch (error) {
       console.error("error updating entry", error)
     }
-    navigate('/personal-dictionary/');
     
   }
 
