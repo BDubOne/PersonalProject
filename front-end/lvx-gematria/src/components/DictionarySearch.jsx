@@ -126,7 +126,7 @@ const handleCheckboxChange = (type, item, isChecked) => {
   
 
   return (
-    <Container >
+    <Container>
       <Form onSubmit={handleSubmit} id='wordsearch-form'>
         <InputGroup className="mb-3">
           <FormControl

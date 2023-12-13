@@ -5,12 +5,12 @@ import { API } from '../utilities/API';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
-function AddEntryForm(props) {
+function AddEntryForm() {
     const [entryData, setEntryData] = useState({
         number: '',
         personal_description: "",
         personal_key_words: "",
-        personal_related_entries: ""
+        personal_related_entries: []
     });
     const { user } = useOutletContext()
 
@@ -28,7 +28,7 @@ function AddEntryForm(props) {
             student_id: user.id,
             personal_description: [entryData.personal_description], // Add the user's id
             personal_key_words: entryData.personal_key_words.split(',').map(kw => kw.trim()),
-            personal_related_entries: entryData.personal_related_entries.split(',').map(num => parseInt(num.trim())).filter(num => !isNaN(num))
+            personal_related_entries: [(entryData.personal_related_entries * 1)]
         };
 
         try {
@@ -38,7 +38,8 @@ function AddEntryForm(props) {
             const response = await API.post('dictionary/personal/', formattedData);
             console.log("Entry added:", response.data);
             props.onSuccess();
-            setEntryData({ number: '', personal_description: '', personal_key_words: '', personal_related_entries: '' }); // Reset form after submission
+            setEntryData({ number: '', personal_description: '', personal_key_words: '', personal_related_entries: [] });
+            window.location.reload(); // Reset form after submission
         } catch (error) {
             console.error("Error adding entry:", error);
             console.log(formattedData)
@@ -46,6 +47,7 @@ function AddEntryForm(props) {
     };
 
     return (
+        <div id="add-entry">
         <Form onSubmit={handleSubmit}>
             {/* Number input field */}
             <Form.Group className="mb-3">
@@ -97,6 +99,7 @@ function AddEntryForm(props) {
 
             <Button variant="primary" type="submit">Add Entry</Button>
         </Form>
+        </div>
     );
 }
 

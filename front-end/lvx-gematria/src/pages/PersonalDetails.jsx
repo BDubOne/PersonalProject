@@ -1,26 +1,30 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { API } from '../utilities/API';
 import Button from 'react-bootstrap/Button';
 import ListGroup from 'react-bootstrap/ListGroup';
-import Container from 'react-bootstrap/Container'
+import Container from 'react-bootstrap/Container';
+import Card from 'react-bootstrap/Card';
 
 
-import { UpdatePersonalEntry, DeletePersonalEntry } from '../utilities/personalDictionaryUtilities';
+import { DeletePersonalEntry } from '../utilities/personalDictionaryUtilities';
+import AddPersonalEntry from '../components/AddPersonalEntry';
 import UpdateEntryForm from '../components/UpdatePersonalEntry';
 // You may also import other components as needed
 
-function PersonalDetails() {
+function PersonalDetails({ number, onRelatedEntrySelect }) {
   const [entry, setEntry] = useState(null);
   const [ showUpdateForm, setShowUpdateForm] = useState(false)
   const [loading, setLoading] = useState(true);
-  const { number } = useParams();
+  // const { number } = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchEntry = async () => {
       setLoading(true);
       try {
+        const token = localStorage.getItem("userToken");
+        API.defaults.headers.common["Authorization"] = `Token ${token}`;
         const response = await API.get(`/dictionary/personal/${number}`);
         setEntry(response.data);
       } catch (error) {
@@ -37,26 +41,42 @@ function PersonalDetails() {
     setShowUpdateForm(true);
   }
 
+  const handleRelatedEntryClick = (relatedNumber) => {
+    
+    if (typeof onRelatedEntrySelect === 'function') {
+      onRelatedEntrySelect(relatedNumber);
+    }
+  };
+
   const handleDelete = async () => {
     try {
       await DeletePersonalEntry(number);
-      navigate('/personal-dictionary');
+      navigate('/personal-dictionary/');
     } catch (error) {
       console.error("Error deleting entry:", error);
     }
-    navigate('/personal-dictionary'); // Redirect after deletion
+    navigate('/personal-dictionary/'); // Redirect after deletion
   };
 
   const handleUpdateSuccess = () => {
-    setShowUpdateForm(false);
+    try {
+      // await UpdatePersonalEntry();
+      setShowUpdateForm(false);
+    } catch (error) {
+      console.error("error updating entry", error)
+    }
+    navigate('/personal-dictionary/');
+    
   }
 
   if (loading) return <div>Loading...</div>;
 
-  if (!entry) return <div>Entry not found.</div>;
+  if (!entry) return <AddPersonalEntry />;
 
   return (
+    <div style={{paddingRight:"5%",width: '40vw', flex: 1}} >
     <Container>
+      <Card style={{height: '50vh'}}>
     <h2>Personal Entry Details for Number {entry.number}</h2>
     <p><strong>Description:</strong></p>
     <ListGroup>
@@ -64,23 +84,38 @@ function PersonalDetails() {
         <ListGroup.Item key={index}>{desc}</ListGroup.Item>
       ))}
     </ListGroup>
-    <p><strong>Key Words:</strong> {entry.personal_key_words.join(', ')}</p>
-    <p><strong>Related Entries:</strong></p>
-    <ListGroup>
-      {entry.personal_related_entries_display.map((relatedNumber, index) => (
-        <ListGroup.Item key={index} action onClick={() => navigate(`/personal-dictionary/${relatedNumber}`)}>
-          Number {relatedNumber}
+    <div style={{ Height: '30vh', overflowY: 'auto' }}> 
+      <p><strong>Key Words:<br/></strong></p>
+      <ListGroup>{entry.personal_key_words.map((keyWord, idx) =>(
+        <ListGroup.Item key={idx}>
+          {keyWord}
         </ListGroup.Item>
       ))}
-    </ListGroup>
+      </ListGroup>
+      
+    
+      <p><strong>Related Numbers:</strong></p>
+    <ListGroup>
+         
+        {entry.personal_related_entries_display.map((relEntry, idx) => (
+          <ListGroup.Item key={idx} action onClick={() => handleRelatedEntryClick(relEntry)}>
+           Number: {relEntry}
+          </ListGroup.Item>
+        ))}
+      </ListGroup>
+      </div>
+      
+      
     {!showUpdateForm && (
-    <>
-    <Button variant="secondary" onClick={handleUpdate}>Update Entry</Button>
+    <div classname="justify-content-bottom">
+    <Button variant="primary" onClick={handleUpdate}>Update Entry</Button>
     <Button variant="danger" onClick={handleDelete}>Delete Entry</Button>
-    {/* Add other functionalities as needed */}
+    
 
-    </>
+    </div>
+    
     )}
+    </Card>
     {showUpdateForm && (
       <UpdateEntryForm 
       entryNumber={number}
@@ -88,6 +123,7 @@ function PersonalDetails() {
       />
     )}
   </Container>
+  </div>
   );
 }
 

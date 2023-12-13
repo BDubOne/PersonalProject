@@ -2,12 +2,13 @@ import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import { useNavigate } from 'react-router-dom';
 
-function NumberCard({ number, descriptionItem, keyWords, dictionaryType }) {
+function NumberCard({ number, descriptionItem, keyWords }) {
   const navigate = useNavigate();
 
   const navigateToDetails = () => {
-    const path = dictionaryType === 'personal' ? `/personal-dictionary/${number}` : `/global-dictionary/${number}`;
-    navigate(path);
+    const path = '/lvx-calculator/'
+   
+    navigate(path, {state: {selectedNumber: number} });
   };
 
   // Handle the case where keyWords array is empty or undefined

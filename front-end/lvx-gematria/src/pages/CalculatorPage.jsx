@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+
+import { useLocation } from 'react-router-dom'
 import { characterValues } from '../utilities/characterValues'
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -16,7 +18,7 @@ import DictionarySearch from '../components/DictionarySearch';
 
 const LanguageSection = ({ languageName, characters, onCharacterClick }) => {
   return (
-    <Card>
+    <Card style={{height:'50vh'}}>
       <Card.Header>{languageName}</Card.Header>
       <Card.Body>
         {Object.keys(characters).map((char, index) => (
@@ -34,9 +36,14 @@ const CalculatorPage = () => {
   const [inputValue, setInputValue] = useState('');
   const [sum, setSum] = useState(0);
   const[selectedNumber, setSelectedNumber] = useState(null)
+  const location = useLocation();
 
   const handleNumberSelect = (number) => {
     setSelectedNumber(number);
+  };
+
+  const handleRelatedEntrySelect = (newNumber) => {
+    setSelectedNumber(newNumber);
   };
 
   const handleCharacterClick = (char) => {
@@ -67,6 +74,10 @@ const CalculatorPage = () => {
     setInputValue(e.target.value);
     calculateAndUpdateSum(e.target.value);
   };
+  const onSuccessAddEntry = () => {
+    setSelectedNumber(props.number)
+    window.location.reload();
+  }
 
   const latinCharacters = Object.fromEntries(
     Object.entries(characterValues).filter(([key]) => /^[a-z]$/i.test(key))
@@ -78,12 +89,21 @@ const CalculatorPage = () => {
     Object.entries(characterValues).filter(([key]) => /^[\u0370-\u03FF]$/.test(key))
   );
 
+  useEffect(() => {
+    if (location.state && location.state.selectedNumber) {
+      setSelectedNumber(location.state.selectedNumber);
+    }
+  }, [location]);
+
   return (
     <Container>
       <TranslateComponent />  
-      <div >
+      <div id="gematria-details">
       {selectedNumber && !isNaN(selectedNumber) && (
-            <GlobalDetails number={selectedNumber} />
+            <GlobalDetails number={selectedNumber} onRelatedEntrySelect={handleRelatedEntrySelect} />
+          )}
+      {selectedNumber && !isNaN(selectedNumber) && (
+            <PersonalDetails number={selectedNumber} onRelatedEntrySelect={handleRelatedEntrySelect} />
           )}
       </div>
               
