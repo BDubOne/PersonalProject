@@ -27,10 +27,10 @@ class GlobalDictionaryList(generics.ListCreateAPIView):
 class GlobalDictionaryDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = DictionaryEntry.objects.all()
     serializer_class = DictionaryEntrySerializer
-    permission_classes = [permissions.IsAuthenticated] 
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly] 
     lookup_field = 'number'
 
-    @ratelimit(key='user', rate='2/m', method='PUT', block=True)
+    # @ratelimit(key=user_or_admin_key, rate='30/h', method="GET", block=True)
     def get_permissions(self):
         if self.request.method in ['PUT', 'DELETE']:
             return [permissions.IsAdminUser()]
@@ -59,7 +59,7 @@ class PersonalDictionaryListCreate(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
     # @ratelimit(key=user_or_admin_key, rate='30/h', method="GET", block=True)
     # @ratelimit(key=user_or_admin_key, rate='5/d', method="GET", block=True)
-    @ratelimit(key='user', rate='2/m', method='POST', block=True)
+
     def get_queryset(self):
         return PersonalDictionaryEntry.objects.filter(student=self.request.user)
 
@@ -72,7 +72,8 @@ class PersonalDictionaryDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [permissions.IsAuthenticated]
     lookup_field = "number"
    
-    @ratelimit(key='user', rate='2/m', method='PUT', block=True)
+    # @ratelimit(key=user_or_admin_key, rate='30/h', method="GET", block=True)
+    # @ratelimit(key=user_or_admin_key, rate='5/d', method="GET", block=True)
     def get_queryset(self):
         return PersonalDictionaryEntry.objects.filter(student=self.request.user)
 
