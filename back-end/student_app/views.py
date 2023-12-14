@@ -1,3 +1,5 @@
+from django.utils import timezone
+from rest_framework.exceptions import ValidationError
 from rest_framework.authtoken.models import Token
 from .serializers import Student, StudentSerializer
 from rest_framework.views import APIView
@@ -30,15 +32,25 @@ class LogIn(APIView):
         email = request.data.get("email")
         password = request.data.get("password")
 
-        student = authenticate(username=email, password=password)
+        try:
+            student = Student.objects.get(email=email)
+            student.reset_attempts_if_needed()
+            if student.lockout_until and timezone.now() < student.lockout_until:
+                return Response("Account is temporarily locked.", status=HTTP_403_FORBIDDEN)
 
-        if student:
-            # get_or_create() returns a tuple: (token, created)
-            # `token` is our Auth Token, `created` is a boolean telling us if the token was just created or already existed.
-            token, created = Token.objects.get_or_create(user=student)
-
-            return Response({"token": token.key, "student": student.email})
-        else:
+            if authenticate(username=email, password=password):
+                token, created = Token.objects.get_or_create(user=student)
+                student.failed_login_attempts = 0  # Reset on successful login
+                student.save()
+                return Response({"token": token.key, "student": student.email})
+            else:
+                student.failed_login_attempts += 1
+                if student.failed_login_attempts >= 3:  # Define MAX_ATTEMPTS
+                    student.lock_account()  # Lock the account
+                else:
+                    student.save()
+                return Response("No student matching credentials", status=HTTP_404_NOT_FOUND)
+        except Student.DoesNotExist:
             return Response("No student matching credentials", status=HTTP_404_NOT_FOUND)
 
 class LogOut(APIView):

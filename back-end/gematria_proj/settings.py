@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'requests',
     'ratelimit',
     'corsheaders',
+    'email_validator',
     'noun_proj_app',
     'student_app',
     'words_app',
