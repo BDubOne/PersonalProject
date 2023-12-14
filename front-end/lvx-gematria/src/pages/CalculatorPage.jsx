@@ -106,7 +106,7 @@ const CalculatorPage = () => {
             <PersonalDetails number={selectedNumber} onRelatedEntrySelect={handleRelatedEntrySelect} />
           )}
       </div>
-              
+      <div style={{marginTop: "10rem"}}>     
       <Row className="justify-content-center">
         <Col md={6}>
           <Card style = {{backgroundColor: "rgba(255, 228, 196, 0.5)"}} className="my-3">
@@ -145,6 +145,7 @@ const CalculatorPage = () => {
           onSelectedNumberChange={handleNumberSelect} />
         </Col>
       </Row>
+      </div> 
     </Container>
   );
 };

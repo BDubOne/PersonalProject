@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import { API } from '../utilities/API';
 
-function SignUp() {
+function SignUp({onSignupSuccess}) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -13,6 +13,7 @@ function SignUp() {
         try {
             const response = await API.post('users/signup/', { email, password });
             console.log("sign up successful:", response.data);
+            onSignupSuccess()
         } catch (err) {
             console.error('error during signup:', err);
         }

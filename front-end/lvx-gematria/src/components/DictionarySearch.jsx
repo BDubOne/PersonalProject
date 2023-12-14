@@ -77,12 +77,12 @@ const handleCheckboxChange = (type, item, isChecked) => {
 
   const renderMeanings = () => {
     return dictionaryData.meanings.map((meaning, idx) => (
-      <ListGroup.Item class="dictsearch" key={idx}>
+      <ListGroup.Item className="dictsearch" key={idx}>
         <div>Part of Speech: {meaning.partOfSpeech}</div>
         {meaning.definitions.map((def, index) => (
             <div key={`${idx}-${index}`}>
                 <Checkbox
-                    class="dictsearch"
+                    className="dictsearch"
                     checked={selectedItems.descriptions.includes(def.definition)}
                     onChange={(e) => handleCheckboxChange('definitions', def.definition, e.target.checked)}
                 />
@@ -92,7 +92,7 @@ const handleCheckboxChange = (type, item, isChecked) => {
         {meaning.synonyms.map((synonym, synIdx) => (
           <div key={synIdx}>
             <Checkbox
-              class="dictsearch"
+              className="dictsearch"
               checked={selectedItems.keyWords.includes(synonym)}
               onChange={(e) => handleCheckboxChange('keyWords', synonym, e.target.checked)}
             />
@@ -102,7 +102,7 @@ const handleCheckboxChange = (type, item, isChecked) => {
         {meaning.antonyms.map((antonym, antIdx) => (
           <div key={antIdx}>
             <Checkbox
-              class="dictsearch"
+              className="dictsearch"
               checked={selectedItems.keyWords.includes(antonym)}
               onChange={(e) => handleCheckboxChange('keyWords', antonym, e.target.checked)}
             />
@@ -115,9 +115,9 @@ const handleCheckboxChange = (type, item, isChecked) => {
 
   const renderNumberData = (data, dataType) => {
     return data.map((item, idx) => (
-      <ListGroup.Item class="dictsearch" key={idx}>
+      <ListGroup.Item className="dictsearch" key={idx}>
         <Checkbox
-          class="dictsearch"
+          className="dictsearch"
           checked={selectedItems.descriptions.includes(item)}
           onChange={(e) => handleCheckboxChange('descriptions', item, e.target.checked)}
         />
@@ -130,29 +130,29 @@ const handleCheckboxChange = (type, item, isChecked) => {
   
 
   return (
-    <Container class="dictsearch">
-      <Form class="dictsearch" onSubmit={handleSubmit} id='wordsearch-form'>
+    <Container className="dictsearch">
+      <Form className="dictsearch" onSubmit={handleSubmit} id='wordsearch-form'>
         <InputGroup className="mb-3">
           <FormControl
-            class="dictsearch"
+            className="dictsearch"
             placeholder="Enter a word"
             aria-label="Word"
             value={word}
             onChange={(e) => setWord(e.target.value)}
           />
           <FormControl
-          class="dictsearch"
+          className="dictsearch"
             placeholder="Enter a number"
             aria-label="Number"
             value={number}
             onChange={(e) => setNumber(e.target.value)}
           />
-          <Button class="dictsearch" variant="primary" type="submit">Search</Button>
+          <Button className="dictsearch" variant="primary" type="submit">Search</Button>
         </InputGroup>
       </Form>
       <div className="scrollable-container">
       {dictionaryData && (
-        <Card class="dictsearch">
+        <Card className="dictsearch">
           <Card.Body>
             <Card.Title>Word: {dictionaryData.word}</Card.Title>
             <Card.Text>Phonetic: {dictionaryData.phonetic}</Card.Text>
@@ -164,7 +164,7 @@ const handleCheckboxChange = (type, item, isChecked) => {
       )}
 
       {(mathData.length > 0 || triviaData.length > 0 || dateData.length > 0) && (
-        <Card class="dictsearch">
+        <Card className="dictsearch">
           <Card.Body>
             <Card.Title>Number Data</Card.Title>
           <ListGroup variant="flush">

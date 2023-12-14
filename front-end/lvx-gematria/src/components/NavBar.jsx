@@ -29,9 +29,9 @@ function NavBar({ user, setUser }) {
             <Link to="/">Home</Link>
                 {user ? (
                     <>
-                        <Nav.Link><Link to="global-dictionary/">Global Dictionary</Link></Nav.Link>
-                        <Nav.Link><Link to="personal-dictionary/">Personal Dictionary</Link></Nav.Link>
-                        <Nav.Link><Link to="lvx-calculator/">LVX Calculator</Link></Nav.Link>                       
+                        <Link to="global-dictionary/">Global Dictionary</Link>
+                        <Link to="personal-dictionary/">Personal Dictionary</Link>
+                        <Link to="lvx-calculator/">LVX Calculator</Link>                       
                         
                         <Button onClick = {logOut} variant="danger">
                             Log Out

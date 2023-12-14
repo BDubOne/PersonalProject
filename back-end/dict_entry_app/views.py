@@ -19,7 +19,7 @@ class GlobalDictionaryList(generics.ListCreateAPIView):
     queryset = DictionaryEntry.objects.all().order_by('number')
     serializer_class = DictionaryEntrySerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]    
-    @ratelimit(key='user', rate='2/m', method='POST', block=True)
+    
     def perform_create(self, serializer):
         
         serializer.save()

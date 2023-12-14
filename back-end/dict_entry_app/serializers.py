@@ -68,6 +68,8 @@ class DictionaryEntrySerializer(serializers.ModelSerializer):
                     RelatedEntry.objects.get_or_create(from_entry=instance, to_entry=to_entry)
         # Custom handling for 'description' field
         if 'description' in validated_data:
+            if isinstance(instance.description, str):
+                instance.description = [instance.description]
             new_descriptions = validated_data['description']
             if isinstance(new_descriptions, list):
                 for new_desc in new_descriptions:
@@ -79,6 +81,8 @@ class DictionaryEntrySerializer(serializers.ModelSerializer):
 
         # Custom handling for 'key_words' field
         if 'key_words' in validated_data:
+            if isinstance(instance.key_words, str):
+                instance.key_words = [instance.key_words]
             new_key_words = validated_data['key_words']
             if isinstance(new_key_words, list):
                 for new_keyword in new_key_words:
@@ -150,10 +154,15 @@ class PersonalDictionaryEntrySerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         # Handling 'personal_description' field
+      
+        # Handling 'personal_description' field
         if 'personal_description' in validated_data:
+            if isinstance(instance.personal_description, str):
+                instance.personal_description = [instance.personal_description]
+
             new_descriptions = validated_data.pop('personal_description', [])
-            if not isinstance(new_descriptions, list):
-                new_descriptions = [new_descriptions]
+            # Ensure it's a list
+            new_descriptions = [new_descriptions] if not isinstance(new_descriptions, list) else new_descriptions
             for new_desc in new_descriptions:
                 if new_desc in instance.personal_description:
                     instance.personal_description.remove(new_desc)
@@ -162,9 +171,11 @@ class PersonalDictionaryEntrySerializer(serializers.ModelSerializer):
 
         # Handling 'personal_key_words' field
         if 'personal_key_words' in validated_data:
+            if isinstance(instance.personal_key_words, str):
+                instance.personal_key_words = [instance.personal_key_words]
             new_key_words = validated_data.pop('personal_key_words', [])
-            if not isinstance(new_key_words, list):
-                new_key_words = [new_key_words]
+            # Ensure it's a list
+            new_key_words = [new_key_words] if not isinstance(new_key_words, list) else new_key_words
             for new_keyword in new_key_words:
                 if new_keyword in instance.personal_key_words:
                     instance.personal_key_words.remove(new_keyword)

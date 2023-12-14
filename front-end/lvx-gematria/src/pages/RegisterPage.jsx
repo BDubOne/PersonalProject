@@ -7,37 +7,43 @@ import Button from "react-bootstrap/esm/Button";
 export const RegisterPage = () => {
   const { user, setUser } = useOutletContext();
   const [existingUser, setExistingUser] = useState(true);
+  const [signupSuccessful, setSignupSuccessful] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     if (user) {
       navigate("/");
     }
-  }, []);
-  return (
-    <>
-      <h1>Register Page</h1>
-      {existingUser ? (
-        <>
-          <SignUp setUser={setUser} />
-          <Button
-            variant="warning"
-            onClick={() => setExistingUser(!existingUser)}
-          >
-            Already have an account
-          </Button>
-        </>
-      ) : (
-        <>
-          <LogIn setUser={setUser} />
-          <Button
-            variant="warning"
-            onClick={() => setExistingUser(!existingUser)}
-          >
-            Don't have an account
-          </Button>
-        </>
-      )}
-    </>
-  );
-};
+  }, [user]);
+
+  const handleSignupSuccess = () => {
+    setSignupSuccessful(true); // Set signup success to true
+    setExistingUser(true);
+  }
+    return (
+      <>
+        <h1>Register Page</h1>
+        {existingUser && !signupSuccessful ? (
+          <>
+            <SignUp setUser={setUser} onSignupSuccess={handleSignupSuccess} />
+            <Button
+              variant="warning"
+              onClick={() => setExistingUser(!existingUser)}
+            >
+              Already have an account
+            </Button>
+          </>
+        ) : (
+          <>
+            <LogIn setUser={setUser} />
+            <Button
+              variant="warning"
+              onClick={() => setExistingUser(!existingUser)}
+            >
+              Don't have an account
+            </Button>
+          </>
+        )}
+      </>
+    );
+  };

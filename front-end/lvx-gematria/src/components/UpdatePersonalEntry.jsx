@@ -47,8 +47,7 @@ function UpdateEntryForm({ entryNumber, onUpdate }) {
     
             const response = await API.put(`dictionary/personal/${entryNumber}/`, formattedData);
             console.log("Entry updated:", response.data);
-            onUpdate(); 
-            window.location.reload()
+            onUpdate(response.data); // Call onUpdate with the updated data
         } catch (error) {
             console.error('Error updating entry:', error);
         }

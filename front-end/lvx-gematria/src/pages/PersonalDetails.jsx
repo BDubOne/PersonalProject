@@ -20,7 +20,7 @@ function PersonalDetails({ number, onRelatedEntrySelect }) {
   // const { number } = useParams();
   const navigate = useNavigate();
 
-  useEffect(() => {
+  
     const fetchEntry = async () => {
       setLoading(true);
       try {
@@ -34,7 +34,7 @@ function PersonalDetails({ number, onRelatedEntrySelect }) {
       }
       setLoading(false);
     };
-
+  useEffect(() => {
     fetchEntry();    
   }, [number, updateTrigger]);
 
@@ -59,14 +59,9 @@ function PersonalDetails({ number, onRelatedEntrySelect }) {
     navigate('/personal-dictionary/'); // Redirect after deletion
   };
 
-  const handleUpdateSuccess = () => {
-    try {
-      // await UpdatePersonalEntry();
-      setShowUpdateForm(false);
-      setUpdateTrigger(!updateTrigger);
-    } catch (error) {
-      console.error("error updating entry", error)
-    }
+  const handleUpdateSuccess = async (updatedData) => {
+   setShowUpdateForm(false);
+   setEntry(updatedData)
     
   }
 
@@ -108,7 +103,7 @@ function PersonalDetails({ number, onRelatedEntrySelect }) {
       
       
     {!showUpdateForm && (
-    <div classname="justify-content-bottom">
+    <div className="justify-content-bottom">
     <Button variant="primary" onClick={handleUpdate}>Update Entry</Button>
     <Button variant="danger" onClick={handleDelete}>Delete Entry</Button>
     
