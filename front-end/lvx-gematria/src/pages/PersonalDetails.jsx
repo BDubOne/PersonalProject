@@ -77,18 +77,18 @@ function PersonalDetails({ number, onRelatedEntrySelect }) {
   return (
     <div style={{paddingRight:"5%",width: '40vw', flex: 1}} >
     <Container>
-      <Card style={{height: '50vh'}}>
+      <Card style={{height: '50vh', backgroundColor: "rgba(255, 228, 196, 0.5)"}}>
     <h2>Personal Entry Details for Number {entry.number}</h2>
     <p><strong>Description:</strong></p>
     <ListGroup>
       {entry.personal_description.map((desc, index) => (
-        <ListGroup.Item key={index}>{desc}</ListGroup.Item>
+        <ListGroup.Item style={{backgroundColor: "rgba(255, 228, 196, 0.1)"}} key={index}>{desc}</ListGroup.Item>
       ))}
     </ListGroup>
-    <div style={{ Height: '30vh', overflowY: 'auto' }}> 
+    <div style={{ Height: '30vh', overflowY: 'auto', backgroundColor: "rgba(255, 228, 196, 0.1)" }}> 
       <p><strong>Key Words:<br/></strong></p>
-      <ListGroup>{entry.personal_key_words.map((keyWord, idx) =>(
-        <ListGroup.Item key={idx}>
+      <ListGroup> {entry.personal_key_words.map((keyWord, idx) =>(
+        <ListGroup.Item style = {{backgroundColor: "rgba(255, 228, 196, 0.1)"}} key={idx}>
           {keyWord}
         </ListGroup.Item>
       ))}
@@ -99,7 +99,7 @@ function PersonalDetails({ number, onRelatedEntrySelect }) {
     <ListGroup>
          
         {entry.personal_related_entries_display.map((relEntry, idx) => (
-          <ListGroup.Item key={idx} action onClick={() => handleRelatedEntryClick(relEntry)}>
+          <ListGroup.Item style = {{backgroundColor: "rgba(255, 228, 196, 0.1)"}}key={idx} action onClick={() => handleRelatedEntryClick(relEntry)}>
            Number: {relEntry}
           </ListGroup.Item>
         ))}

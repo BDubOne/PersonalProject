@@ -72,27 +72,27 @@ function AddEntryForm() {
 
             {/* Key Words input field */}
             <Form.Group className="mb-3">
-                <Form.Label>Key Words</Form.Label>
-                <Form.Control
-                    type="text"
-                    name="personal_key_words"
-                    value={entryData.personal_key_words.join(', ')}
-                    onChange={handleChange}
-                    placeholder="Enter key words (comma-separated)"
-                />
-            </Form.Group>
+                    <Form.Label>Key Words</Form.Label>
+                    <Form.Control
+                        type="text"
+                        name="personal_key_words"
+                        value={entryData.personal_key_words}
+                        onChange={handleChange}
+                        placeholder="Enter key words (comma-separated)"
+                    />
+                </Form.Group>
 
             {/* Related Entries input field */}
             <Form.Group className="mb-3">
-                <Form.Label>Related Entries</Form.Label>
-                <Form.Control
-                    type="text"
-                    name="personal_related_entries"
-                    value={entryData.personal_related_entries.join(', ')}
-                    onChange={handleChange}
-                    placeholder="Enter related entry numbers (comma-separated)"
-                />
-            </Form.Group>
+                    <Form.Label>Related Entries</Form.Label>
+                    <Form.Control
+                        type="text"
+                        name="personal_related_entries"
+                        value={entryData.personal_related_entries} // Use as a string
+                        onChange={handleChange}
+                        placeholder="Enter related entry numbers (comma-separated)"
+                    />
+                </Form.Group>
 
             <Button variant="primary" type="submit">Add Entry</Button>
         </Form>

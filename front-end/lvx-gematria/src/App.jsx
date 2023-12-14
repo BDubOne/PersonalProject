@@ -31,13 +31,13 @@ function App() {
   }, []);
 
   return (
-    <>
+    <div id="wrapper">
       <NavBar user={user} setUser={setUser} />
-      <Container>
-      <h3>Welcome {user ? user.email : 'Guest'}</h3> {/* Assuming 'user' has an 'email' field */}
+      <Container id="welcome">
+      <h3>Welcome {user ? user.email : 'Guest'}</h3>
       <Outlet context={{ user, setUser }} />
       </Container>
-    </>
+    </div>
   );
 }
 

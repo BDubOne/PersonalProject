@@ -1,11 +1,14 @@
 import Row from "react-bootstrap/Row"
 
+import { IntroCarousel } from '../components/IntroCarousel'
+
 export const Home=()=>{
     
     return(
-        <>
-        <h1>Homepage</h1>
-        </>
+        <div>
+        <IntroCarousel />
+        
+      </div>
 
 
     )

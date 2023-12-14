@@ -19,8 +19,8 @@ import DictionarySearch from '../components/DictionarySearch';
 const LanguageSection = ({ languageName, characters, onCharacterClick }) => {
   return (
     <Card style={{height:'50vh'}}>
-      <Card.Header>{languageName}</Card.Header>
-      <Card.Body>
+      <Card.Header style = {{backgroundColor: "rgba(255, 228, 196, 0.5)"}}>{languageName}</Card.Header>
+      <Card.Body style = {{backgroundColor: "rgba(255, 228, 196, 0.5)"}}>
         {Object.keys(characters).map((char, index) => (
           <Button key={index} variant="outline-primary" onClick={() => onCharacterClick(char)} className="m-1">
             {char}
@@ -98,7 +98,7 @@ const CalculatorPage = () => {
   return (
     <Container>
       <TranslateComponent />  
-      <div id="gematria-details">
+      <div  id="gematria-details">
       {selectedNumber && !isNaN(selectedNumber) && (
             <GlobalDetails number={selectedNumber} onRelatedEntrySelect={handleRelatedEntrySelect} />
           )}
@@ -109,11 +109,12 @@ const CalculatorPage = () => {
               
       <Row className="justify-content-center">
         <Col md={6}>
-          <Card className="my-3">
+          <Card style = {{backgroundColor: "rgba(255, 228, 196, 0.5)"}} className="my-3">
             <Card.Body>
-              <Form>
+              <Form >
                 <Form.Group className="mb-3">
                   <Form.Control
+                    style = {{backgroundColor: "rgba(255, 228, 196, 0.5)"}}
                     type="text"
                     value={inputValue}
                     onChange={handleInputChange}
@@ -125,9 +126,9 @@ const CalculatorPage = () => {
             </Card.Body>
           </Card>
 
-          <Row>
-            <Col md={4}>
-              <LanguageSection languageName="Latin" characters={latinCharacters} onCharacterClick={handleCharacterClick} />
+          <Row >
+            <Col style = {{backgroundColor: "rgba(255, 228, 196, 0.5)"}} md={4}>
+              <LanguageSection style = {{backgroundColor: "rgba(255, 228, 196, 0.5)"}} languageName="Latin" characters={latinCharacters} onCharacterClick={handleCharacterClick} />
             </Col>
             <Col md={4}>
               <LanguageSection languageName="Hebrew" characters={hebrewCharacters} onCharacterClick={handleCharacterClick} />
@@ -139,6 +140,7 @@ const CalculatorPage = () => {
         </Col>
         <Col md={6}>
           <DictionarySearch 
+          style = {{backgroundColor: "rgba(255, 228, 196, 0.5)"}}
           classname="scrollable-container"
           onSelectedNumberChange={handleNumberSelect} />
         </Col>

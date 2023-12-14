@@ -60,7 +60,7 @@ function GlobalDetails( {number, onRelatedEntrySelect }) {
   return (
     <div style={{paddingRight: "5%",width: '40vw', flex: 1 }}>
     <Container>  
-    <Card style={{height: '50vh'}}>
+    <Card style={{height: '50vh', backgroundColor: "rgba(255, 228, 196, 0.5)"}}>
       <Card.Body>
         <Card.Title>Number {entry.number}</Card.Title>
         <Card.Text>
@@ -70,7 +70,7 @@ function GlobalDetails( {number, onRelatedEntrySelect }) {
         <Button disabled={descriptionIndex <= 0} onClick={() => setDescriptionIndex(i => i - 5)}>Previous</Button>
         <Button disabled={descriptionIndex + 5 >= entry.description.length} onClick={() => setDescriptionIndex(i => i + 5)}>Next</Button>       
 
-        <div style={{ maxHeight: '100px', overflowY: 'auto' }}> 
+        <div style={{ maxHeight: '100px', overflowY: 'auto', backgroundColor: "rgba(255, 228, 196, 0.5)" }}> 
       <p><strong>Key Words:<br/></strong></p>
       <ListGroup>{entry.key_words.map((keyWord, idx) =>(
         <ListGroup.Item key={idx}>
@@ -79,11 +79,11 @@ function GlobalDetails( {number, onRelatedEntrySelect }) {
       ))}
       </ListGroup>
       </div>
-        <div style={{ maxHeight: '75px', overflowY: 'auto' }}>
+        <div style={{ maxHeight: '75px', overflowY: 'auto', backgroundColor: "rgba(255, 228, 196, 0.1)" }}>
         <p><strong> Related Numbers: </strong></p>
         <ListGroup>       
         {entry.related_entries_display.map((relEntry, idx) => (
-          <ListGroup.Item key={idx} action onClick={() => handleRelatedEntryClick(relEntry)}>
+          <ListGroup.Item style= {{backgroundColor: "rgba(255, 228, 196, 0.1)"}} key={idx} action onClick={() => handleRelatedEntryClick(relEntry)}>
             Number {relEntry}
           </ListGroup.Item>
         ))}

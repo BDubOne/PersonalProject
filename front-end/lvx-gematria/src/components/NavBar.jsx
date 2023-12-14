@@ -20,8 +20,8 @@ function NavBar({ user, setUser }) {
     };
     
   return (
-    <Navbar expand="lg" className="bg-body-tertiary">
-      <Container>
+    <Navbar style={{ backgroundColor: 'rgb(241, 189, 126)' }} expand="lg" className="bg-body-tertiary">
+      <Container id="navbar">
         <Navbar.Brand>LVX-Gematria</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
