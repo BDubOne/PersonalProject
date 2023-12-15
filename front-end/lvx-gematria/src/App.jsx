@@ -16,18 +16,25 @@ function App() {
   };
 
   // Function to get user info
-  const getInfo = async () => {
-    const token = getCookie('token');
-    if (token) {
-      API.defaults.headers.common['Authorization'] = `Token ${token}`;
-      try {
-        const response = await API.get('users/info/');
-        setUser(response.data);
-      } catch (error) {
-        console.error('Error fetching user info:', error);
-      }
+  
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+        const response = await API.post('users/login/', { email, password }, {
+            withCredentials: true
+        });
+
+        if (response.data.student) {
+            setUser({ email: response.data.student.email }); // Update the user state with the email
+            navigate("/");
+        } else {
+            alert("Login failed. Please check your credentials.");
+        }
+    } catch (error) {
+        console.error('Login error:', error);
+        alert("Login error. Please try again.");
     }
-  };
+};
 
   useEffect(() => {
     getInfo();
