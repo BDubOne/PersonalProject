@@ -2,12 +2,14 @@ from django.shortcuts import render
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError
+
 from .models import DictionaryEntry, PersonalDictionaryEntry
 from .serializers import DictionaryEntrySerializer, RelatedEntry, PersonalRelatedEntry, PersonalDictionaryEntrySerializer
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 from django_ratelimit.decorators import ratelimit
 from django_ratelimit.core import get_usage, is_ratelimited
+
 
 
 def user_or_admin_key(group, request):
@@ -137,22 +139,41 @@ class PersonalDictionaryDetail(generics.RetrieveUpdateDestroyAPIView):
 
 class PersonalDictionaryQuery(generics.ListAPIView):
     serializer_class = PersonalDictionaryEntrySerializer
-    permission_classes = [permissions.IsAuthenticated]
-    
-    # @ratelimit(key=user_or_admin_key, rate='30/h', method="GET", block=True)
+    permission_classes = [IsAuthenticated]
+
     def get_queryset(self):
         query = self.kwargs.get('query')
-        queryset = PersonalDictionaryEntry.objects.filter(student=self.request.user)
 
-        if query.isdigit():
-            # Query is a number, filter by personal related entry number
-            related_entries = PersonalRelatedEntry.objects.filter(to_personal_entry__number=int(query), from_personal_entry__student=self.request.user).values_list('from_personal_entry__number', flat=True)
-            queryset = queryset.filter(number__in=related_entries)
-        else:
-            # Query is a string, filter by personal keyword
-            queryset = queryset.filter(personal_key_words__contains=[query])
-        
-        return queryset
+        if not query:
+            # If query parameter is not provided
+            raise Response({'detail': 'Query parameter is required.'}, status=HTTP_400_BAD_REQUEST)
+
+        try:
+            queryset = PersonalDictionaryEntry.objects.filter(student=self.request.user)
+
+            if query.isdigit():
+                # Filter by personal related entry number if query is a digit
+                related_entries = PersonalRelatedEntry.objects.filter(
+                    to_personal_entry__number=int(query), 
+                    from_personal_entry__student=self.request.user
+                ).values_list('from_personal_entry__number', flat=True)
+                queryset = queryset.filter(number__in=related_entries)
+            else:
+                # Filter by personal keyword if query is a string
+                queryset = queryset.filter(personal_key_words__contains=[query])
+            
+            if not queryset.exists():
+                # If the query returns no results
+                raise Response({'detail': 'No matching entries found.'}, status=HTTP_404_NOT_FOUND)
+
+            return queryset
+
+        except ValueError:
+            # Handle ValueError if query.isdigit() fails
+            raise Response({'detail': 'Invalid query parameter.'}, status=HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            # Handle any other unexpected error
+            return Response({'detail': str(e)}, status=HTTP_400_BAD_REQUEST)
 
 
 
