@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useOutletContext } from 'react-router-dom';
 
 import { API } from '../utilities/API';
 
@@ -34,10 +34,13 @@ function LogIn({ setUser }) {  // Assuming setUser is passed as a prop
         e.preventDefault();
         try {
             const response = await API.post('users/login/', { email, password }, {
-                withCredentials: true 
+                withCredentials: true
             });
-            if (response.data.user) {
-                setUser(response.data.user);
+    
+            // Assuming the response includes the email of the logged-in user
+            if (response.data.student) {
+                // Update the user state with the email
+                setUser({ email: response.data.student });
                 navigate("/");
             } else {
                 alert("Login failed. Please check your credentials.");
@@ -46,7 +49,7 @@ function LogIn({ setUser }) {  // Assuming setUser is passed as a prop
             console.error('Login error:', error);
             alert("Login error. Please try again.");
         }
-    }
+    };
 
     return (
         <Form onSubmit={handleSubmit}>
