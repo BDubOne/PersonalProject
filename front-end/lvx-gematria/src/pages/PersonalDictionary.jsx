@@ -32,14 +32,17 @@ function PersonalDictionary() {
     fetchPersonalEntries();
   }, []);
 
-  const handleDelete = async (number) => {
-    try {
-        await DeletePersonalEntry(number);
-        console.log(`Entry with number ${number} deleted`);
-        setEntries(currentEntries => currentEntries.filter(entry => entry.number !== number));
-    } catch (error) {
-        console.error("Error deleting entry:", error);
-    }
+ 
+const handleDelete = async (number) => {
+  try {
+      const response = await DeletePersonalEntry(number);
+      if (response.status === 200) { // or whatever success status your API returns
+          setEntries(currentEntries => currentEntries.filter(entry => entry.number !== number));
+          console.log(`Entry with number ${number} deleted`);
+      }
+  } catch (error) {
+      console.error("Error deleting entry:", error);
+  }
 };
   const onSuccessAddEntry = () => {
     fetchPersonalEntries();
