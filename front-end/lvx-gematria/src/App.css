@@ -58,6 +58,13 @@ body {
   padding-right: 13%;
   Padding-top: 5%;
   border: 1px solid gray;
-}
+
+  @media (max-width: 768px) {
+    width: 100%;
+    padding-top: 15%;
+  }
+ 
+    /* Full width */
+  }
 
 
