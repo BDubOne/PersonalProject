@@ -41,7 +41,7 @@ function GlobalDetails({ number, onRelatedEntrySelect }) {
   return (
     <div classname="global-details" style={{ paddingRight: "5%", flex: 1 }}>
       <Container>
-        <Card style={{ height: '50vh', backgroundColor: "rgba(255, 228, 196, 0.5)" }}>
+        <Card id="detail-card" style={{ height: '50vh', backgroundColor: "rgba(255, 228, 196, 0.5)" }}>
           <Card.Body>
             <Card.Title>Number {entry.number}</Card.Title>
             <strong>Descriptions:</strong>
