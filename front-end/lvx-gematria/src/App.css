@@ -18,6 +18,13 @@ body {
     
     color: black;
   }
+  @media (max-width:768px){
+  .personal-details, .global-details {
+  
+    width:100%;
+    padding-right: 0;
+  }
+  } 
 
 #welcome {
   color: white;

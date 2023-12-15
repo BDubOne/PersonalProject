@@ -70,7 +70,7 @@ function PersonalDetails({ number, onRelatedEntrySelect }) {
   if (!entry) return <AddPersonalEntry />;
 
   return (
-    <div classname="personal-details" style={{paddingRight:"5%",width: '40vw', flex: 1}} >
+    <div classname="personal-details" style={{paddingRight:"5%", flex: 1}} >
     <Container>
       <Card style={{height: '50vh', backgroundColor: "rgba(255, 228, 196, 0.5)"}}>
     <h2>Personal Entry Details for Number {entry.number}</h2>
