@@ -10,17 +10,34 @@ function LogIn({ setUser }) {  // Assuming setUser is passed as a prop
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
 
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault();
+    //     try {
+    //         const response = await API.post('users/login/', { email, password });
+    //         if (response.data.token) {
+    //             setUser(response.data.user); // Update user state
+    //             localStorage.setItem('userToken', response.data.token);
+    //             API.defaults.headers.common["Authorization"] = `Token ${response.data.token}`;
+    //             setUser(response.data)
+    //             console.log(response.data)
+    //             console.log(response.data.token)
+    //             navigate("/");
+    //         } else {
+    //             alert("Login failed. Please check your credentials.");
+    //         }
+    //     } catch (error) {
+    //         console.error('Login error:', error);
+    //         alert("Login error. Please try again.");
+    //     }
+    // };
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await API.post('users/login/', { email, password });
-            if (response.data.token) {
-                setUser(response.data.user); // Update user state
-                localStorage.setItem('userToken', response.data.token);
-                API.defaults.headers.common["Authorization"] = `Token ${response.data.token}`;
-                setUser(response.data)
-                console.log(response.data)
-                console.log(response.data.token)
+            const response = await API.post('users/login/', { email, password }, {
+                withCredentials: true 
+            });
+            if (response.data.user) {
+                setUser(response.data.user);
                 navigate("/");
             } else {
                 alert("Login failed. Please check your credentials.");
@@ -29,7 +46,7 @@ function LogIn({ setUser }) {  // Assuming setUser is passed as a prop
             console.error('Login error:', error);
             alert("Login error. Please try again.");
         }
-    };
+    }
 
     return (
         <Form onSubmit={handleSubmit}>

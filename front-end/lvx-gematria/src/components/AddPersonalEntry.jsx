@@ -13,6 +13,7 @@ function AddEntryForm() {
         personal_related_entries: ''
     });
     const { user } = useOutletContext();
+    const navigate = useNavigate()
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -28,6 +29,7 @@ function AddEntryForm() {
             personal_description: entryData.personal_description.split(',').map(item => item.trim()),
             personal_key_words: entryData.personal_key_words.split(',').map(item => item.trim()),
             personal_related_entries: entryData.personal_related_entries.split(',').map(Number)
+            
         };
 
         try {
@@ -38,6 +40,7 @@ function AddEntryForm() {
             console.log("Entry added:", response.data);
             props.onSuccess();
             setEntryData({ number: '', personal_description: '', personal_key_words: '', personal_related_entries: '' });
+            navigate('/lvx-calculator/')
         } catch (error) {
             console.error("Error adding entry:", error);
         }
