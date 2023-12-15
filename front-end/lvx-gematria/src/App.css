@@ -38,6 +38,11 @@ body {
   margin-top: 3%;
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
 }
 
 #add-entry {
