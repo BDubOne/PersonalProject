@@ -1,14 +1,17 @@
+
 import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { useNavigate, useOutletContext } from 'react-router-dom';
-
 import { API } from '../utilities/API';
 
-function LogIn({ setUser }) {  // Assuming setUser is passed as a prop
+function LogIn() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
+    const { setUser } = useOutletContext(); // Retrieve setUser from the context
+
+
 
     // const handleSubmit = async (e) => {
     //     e.preventDefault();
@@ -30,17 +33,16 @@ function LogIn({ setUser }) {  // Assuming setUser is passed as a prop
     //         alert("Login error. Please try again.");
     //     }
     // };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
             const response = await API.post('users/login/', { email, password }, {
                 withCredentials: true
             });
-    
-            // Assuming the response includes the email of the logged-in user
+
             if (response.data.student) {
-                // Update the user state with the email
-                setUser({ email: response.data.student });
+                setUser({ email: response.data.student }); // Update the user state
                 navigate("/");
             } else {
                 alert("Login failed. Please check your credentials.");
