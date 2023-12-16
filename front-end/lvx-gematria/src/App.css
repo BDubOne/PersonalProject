@@ -1,0 +1,51 @@
+
+body {
+  background-image: url('./images/anibeth8_a_beautiful_papyrus_background_with_an_ink_vial_and_a__f26fe676-fce9-4e84-83ed-9b73f10e4b45.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  margin: 0;
+}
+
+
+.scrollable-container {
+    border: .5px solid rgba(255, 228, 196, 0.5);
+    height: 58vh;
+    overflow-y: auto;  /* Enables vertical scrolling if content overflows */
+  }
+  .dictsearch{
+    background-color: rgba(255, 228, 196, 0.5);
+    
+    color: black;
+  }
+
+#welcome {
+  color: white;
+
+  
+}
+
+#navbar {
+  background-color: rgba(255, 228, 196, 0.5);
+}
+
+#wordsearch-form {
+    margin-top:2.5%;
+    margin-left: 4%;
+}
+
+#gematria-details {
+  margin-top: 3%;
+  display: flex;
+  justify-content: space-between;
+}
+
+#add-entry {
+  
+  padding-left: 13%;
+  padding-right: 13%;
+  Padding-top: 5%;
+  border: 1px solid gray;
+}
+
+
