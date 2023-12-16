@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useOutletContext } from 'react-router-dom';
 import NumberCard from '../components/NumberCard';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
@@ -13,13 +13,12 @@ function PersonalDictionary() {
   const [entries, setEntries] = useState([]);
   const [showAddForm, setShowAddForm] = useState(false);
   const navigate = useNavigate();
+  const { user } = useOutletContext()
 
   // Moved fetchPersonalEntries outside of useEffect
   const fetchPersonalEntries = async () => {
-    const token = localStorage.getItem("userToken");
-    API.defaults.headers.common["Authorization"] = `Token ${token}`;
-    try {
-      const response = await API.get('dictionary/personal/');
+    try{
+    const response = await API.get('dictionary/personal/', { withCredentials: true });
       setEntries(response.data.results);
       console.log("Fetched entries:", response.data.results);
     } catch (err) {
@@ -29,8 +28,12 @@ function PersonalDictionary() {
   };
 
   useEffect(() => {
-    fetchPersonalEntries();
-  }, []);
+    if (user) {
+      fetchPersonalEntries();
+    } else {
+      navigate('/login'); // Redirect to login if the user is not authenticated
+    }
+  }, [user, navigate]);
 
  
 const handleDelete = async (number) => {
