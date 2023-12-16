@@ -16,25 +16,30 @@ function GlobalDictionary() {
 
   useEffect(() => {
     const fetchEntries = async () => {
-      const token = localStorage.getItem("userToken");        
-      API.defaults.headers.common["Authorization"] = `Token ${token}`;
-      const response = await API.get('/dictionary/', {
-        params: { page: currentPage }
-      });
-      setEntries(response.data.results);
-      setTotalPages(response.data.total_pages); // Adjust according to your API response structure
+      try {
+        const response = await API.get('/dictionary/', {
+          params: { page: currentPage },
+          withCredentials: true
+        });
+        setEntries(response.data.results);
+        setTotalPages(response.data.total_pages); 
+      } catch (error) {
+        console.error('Error fetching dictionary entries:', error);
+      
+      }
     };
-
+  
     fetchEntries();
   }, [currentPage]);
-
+  
   const handleNextPage = () => {
     setCurrentPage(current => current + 1);
   };
-
+  
   const handlePreviousPage = () => {
     setCurrentPage(current => current - 1);
   };
+  
 
   return (
     <Container>
