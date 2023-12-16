@@ -10,28 +10,27 @@ from django.http import JsonResponse
 from django_ratelimit.decorators import ratelimit
 from django_ratelimit.core import get_usage, is_ratelimited
 
+from student_app.utilities import HttpOnlyTokenAuthentication
 
+from rest_framework.views import APIView
+from rest_framework.parsers import JSONParser
 
-def user_or_admin_key(group, request):
-    if request.user.is_staff:
-        return "admin"
-    return request.user.username
+class GlobalDictionaryList(APIView):
+    authentication_classes = [HttpOnlyTokenAuthentication]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
+    def get(self, request, format=None):
+        entries = DictionaryEntry.objects.all().order_by('number')
+        serializer = DictionaryEntrySerializer(entries, many=True)
+        return Response(serializer.data)
 
-class GlobalDictionaryList(generics.ListCreateAPIView):  
-    queryset = DictionaryEntry.objects.all().order_by('number')
-    serializer_class = DictionaryEntrySerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]    
-    
-    def create(self, request, *args, **kwargs):
-        try:
-            return super(GlobalDictionaryList, self).create(request, *args, **kwargs)
-        except ValidationError as e:
-            return Response(e.detail, status=status.HTTP_400_BAD_REQUEST)
-        
-    def perform_create(self, serializer):
-        
-        serializer.save()
+    def post(self, request, format=None):
+        serializer = DictionaryEntrySerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class GlobalDictionaryDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = DictionaryEntry.objects.all()

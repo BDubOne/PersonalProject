@@ -24,9 +24,7 @@ function PersonalDetails({ number, onRelatedEntrySelect }) {
     const fetchEntry = async () => {
       setLoading(true);
       try {
-        const token = localStorage.getItem("userToken");
-        API.defaults.headers.common["Authorization"] = `Token ${token}`;
-        const response = await API.get(`/dictionary/personal/${number}`);
+        const response = await API.get(`/dictionary/personal/${number}`, {withCredentials: true});
         setEntry(response.data);
       } catch (error) {
         console.error('Error fetching entry:', error);

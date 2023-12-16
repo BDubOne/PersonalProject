@@ -12,9 +12,7 @@ function GlobalDetails({ number, onRelatedEntrySelect }) {
   useEffect(() => {
     if (number) {
       const fetchEntry = async () => {
-        const token = localStorage.getItem("userToken");
-        API.defaults.headers.common["Authorization"] = `Token ${token}`;
-        const response = await API.get(`/dictionary/${number}`);
+        const response = await API.get(`/dictionary/${number}`, {withCredentials: true});
         setEntry(response.data);
       };
 

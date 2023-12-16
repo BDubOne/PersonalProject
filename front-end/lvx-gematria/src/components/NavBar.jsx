@@ -31,6 +31,7 @@ function NavBar({ user, setUser }) {
           navigate('/');
       } catch (error) {
           console.error("Error during logout:", error);
+          navigate('/')
           // Handle logout error (e.g., display a message)
       }
   };
