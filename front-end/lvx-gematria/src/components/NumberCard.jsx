@@ -6,10 +6,14 @@ function NumberCard({ number, descriptionItem, keyWords }) {
   const navigate = useNavigate();
 
   const navigateToDetails = () => {
-    const path = '/lvx-calculator/'
-   
-    navigate(path, {state: {selectedNumber: number} });
-  };
+    const path = '/lvx-calculator/';
+    // Explicitly check if number is not null or undefined
+    if (number !== null && number !== undefined) {
+        navigate(path, { state: { selectedNumber: number } });
+    } else {
+        console.error("Invalid number for navigation:", number);
+    }
+};
 
   // Handle the case where keyWords array is empty or undefined
   const displayKeywords = keyWords && keyWords.length > 0 ? keyWords.join(', ') : 'No keywords';
