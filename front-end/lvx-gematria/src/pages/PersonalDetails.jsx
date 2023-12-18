@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { API } from '../utilities/API';
 import Button from 'react-bootstrap/Button';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Container from 'react-bootstrap/Container';
@@ -14,7 +13,7 @@ import UpdateEntryForm from '../components/UpdatePersonalEntry';
 
 
 function PersonalDetails({ number, onRelatedEntrySelect }) {
-  const { entry, loading, error, fetchEntry } = usePersonalDetails();
+  const { entry =null, loading, error, fetchEntry, dispatch } = usePersonalDetails();
   const [ showUpdateForm, setShowUpdateForm] = useState(false)
 
   const { fetchPersonalEntries } = usePersonalDictionary();
@@ -69,8 +68,8 @@ function PersonalDetails({ number, onRelatedEntrySelect }) {
 
   const handleUpdateSuccess = async (updatedData) => {
    setShowUpdateForm(false);
-   await fetchPersonalEntries();
-   await fetchEntry();    
+   dispatch({ type: 'FETCH_SUCCESS', payload: updatedData });
+   fetchPersonalEntries();
   }
 
   if (!entry) return <AddPersonalEntry />;

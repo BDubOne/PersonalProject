@@ -1,7 +1,12 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { API } from '../utilities/API';
 
-const PersonalDictionaryContext = createContext();
+const PersonalDictionaryContext = createContext({
+    entries: [],
+    setEntries: () => {},
+    isLoading: true,
+    fetchPersonalEntries: () => {}
+  });
 
 export const usePersonalDictionary = () => useContext(PersonalDictionaryContext);
 

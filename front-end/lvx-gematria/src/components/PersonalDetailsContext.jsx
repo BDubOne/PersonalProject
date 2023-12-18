@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext, useEffect, useReducer } from 'react';
+import React, { createContext, useContext, useReducer, useCallback } from 'react';
 import { API } from '../utilities/API';
 
 const PersonalDetailsContext = createContext();
@@ -28,7 +28,7 @@ export const PersonalDetailsProvider = ({ children }) => {
   const [state, dispatch] = useReducer(personalDetailsReducer, initialState)
 
 
-  const fetchEntry = async (number) => {
+  const fetchEntry = useCallback(async (number) => {
     dispatch({ type: 'FETCH_START' });
     try {
       const token = localStorage.getItem("userToken");
@@ -39,11 +39,11 @@ export const PersonalDetailsProvider = ({ children }) => {
       console.error('Error fetching entry:', error);
       dispatch({ type: 'FETCH_ERROR', payload: error });
     }
-  };
+  }, []) ;
 
 
   return (
-    <PersonalDetailsContext.Provider value={{ ...state, fetchEntry }}>
+    <PersonalDetailsContext.Provider value={{ ...state, dispatch, fetchEntry }}>
       {children}
     </PersonalDetailsContext.Provider>
   );

@@ -15,8 +15,11 @@ function NumberCard({ number, descriptionItem, keyWords }) {
     }
 };
 
-  // Handle the case where keyWords array is empty or undefined
-  const displayKeywords = keyWords && keyWords.length > 0 ? keyWords.join(', ') : 'No keywords';
+
+const keywordsArray = Array.isArray(keyWords) ? keyWords : [];
+
+// Join keywords with a comma and space
+const displayKeywords = keywordsArray.join(", ");
 
   return (
     <Card style={{ border: '1px black solid',width: '18rem', height: '15rem', padding: '2%', margin:"3%", backgroundColor: "rgba(255, 228, 196, 0.5)" }}>

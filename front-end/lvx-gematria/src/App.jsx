@@ -32,17 +32,17 @@ function App() {
   }, []);
 
   return (
-      <div>
-      <NavBar user={user} setUser={setUser} />
-      <Container id="welcome">
-        <h3>Welcome {user ? user.email : 'Guest'}</h3>
-        </Container>
-      <Outlet context={{ user, setUser }} />
-      <PersonalDictionaryProvider>
-        <PersonalDetailsProvider>       
-        </PersonalDetailsProvider>
-      </PersonalDictionaryProvider>
-      </div>
+    <div>
+    <NavBar user={user} setUser={setUser} />
+    <Container id="welcome">
+      <h3>Welcome {user ? user.email : 'Guest'}</h3>
+    </Container>
+    <PersonalDictionaryProvider>
+      <PersonalDetailsProvider>
+        <Outlet context={{ user, setUser }} />
+      </PersonalDetailsProvider>
+    </PersonalDictionaryProvider>
+  </div>
    
   );
 }
