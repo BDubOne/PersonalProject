@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react'
 import { Outlet } from 'react-router-dom'
+
 import NavBar from './components/NavBar'
+import { API } from './utilities/API'
+import { PersonalDictionaryProvider } from './components/PersonalDictionaryContext'
 
 import './App.css'
-
-import { API } from './utilities/API'
-
 import Container from 'react-bootstrap/Container';
 
 
@@ -31,13 +31,17 @@ function App() {
   }, []);
 
   return (
-    <div id="wrapper">
+      <div>
+      <PersonalDictionaryProvider>
       <NavBar user={user} setUser={setUser} />
       <Container id="welcome">
       <h3>Welcome {user ? user.email : 'Guest'}</h3>
-      <Outlet context={{ user, setUser }} />
       </Container>
-    </div>
+      <Outlet context={{ user, setUser }} />
+
+      </PersonalDictionaryProvider>
+      </div>
+   
   );
 }
 

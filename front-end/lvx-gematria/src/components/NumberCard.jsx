@@ -19,7 +19,7 @@ function NumberCard({ number, descriptionItem, keyWords }) {
   const displayKeywords = keyWords && keyWords.length > 0 ? keyWords.join(', ') : 'No keywords';
 
   return (
-    <Card style={{ width: '18rem', backgroundColor: "rgba(255, 228, 196, 0.5)" }}>
+    <Card style={{ border: '1px black solid',width: '18rem', height: '15rem', padding: '2%', margin:"3%", backgroundColor: "rgba(255, 228, 196, 0.5)" }}>
       <Card.Body>
         <Card.Title>Number {number}</Card.Title>
         <Card.Text>
