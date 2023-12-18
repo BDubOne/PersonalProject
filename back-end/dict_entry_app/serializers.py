@@ -87,9 +87,9 @@ class DictionaryEntrySerializer(serializers.ModelSerializer):
             if isinstance(new_key_words, list):
                 for new_keyword in new_key_words:
                     if new_keyword in instance.key_words:
-                        instance.key_words.remove(new_keyword)
+                        instance.key_words.remove(new_keyword.lower())
                     else:
-                        instance.key_words.append(new_keyword)
+                        instance.key_words.append(new_keyword.lower())
             validated_data.pop('key_words', None)
         
         
@@ -178,9 +178,9 @@ class PersonalDictionaryEntrySerializer(serializers.ModelSerializer):
             new_key_words = [new_key_words] if not isinstance(new_key_words, list) else new_key_words
             for new_keyword in new_key_words:
                 if new_keyword in instance.personal_key_words:
-                    instance.personal_key_words.remove(new_keyword)
+                    instance.personal_key_words.remove(new_keyword.lower())
                 else:
-                    instance.personal_key_words.append(new_keyword)
+                    instance.personal_key_words.append(new_keyword.lower())
 
         # Handling 'personal_related_entries' field
         if 'personal_related_entries' in validated_data:

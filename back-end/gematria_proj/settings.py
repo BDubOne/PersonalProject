@@ -162,7 +162,7 @@ REST_FRAMEWORK = {
 }
 
 
-RATELIMIT_USE_CACHE = 'default'
+
 
 
 AUTH_USER_MODEL = 'student_app.Student'
