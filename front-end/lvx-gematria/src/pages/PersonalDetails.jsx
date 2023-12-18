@@ -35,7 +35,11 @@ function PersonalDetails({ number, onRelatedEntrySelect }) {
       setLoading(false);
     };
   useEffect(() => {
-    fetchEntry();    
+    if (number !== null && number !== undefined && !isNaN(number)) {
+      setEntry(null)
+      setLoading(true)
+      fetchEntry();
+    }
   }, [number, updateTrigger]);
 
   const handleUpdate = () => {
@@ -62,7 +66,8 @@ function PersonalDetails({ number, onRelatedEntrySelect }) {
 
   const handleUpdateSuccess = async (updatedData) => {
    setShowUpdateForm(false);
-   setEntry(updatedData)
+   setEntry(updatedData);
+   await PaymentResponse.reFetchPersonalEntry();
     
   }
 
@@ -73,7 +78,7 @@ function PersonalDetails({ number, onRelatedEntrySelect }) {
   return (
     <div className="personal-details" style={{paddingRight:"5%",width: '40vw', flex: 1}} >
     <Container>
-      <Card style={{height: '50vh', backgroundColor: "rgba(255, 228, 196, 0.5)"}}>
+      <Card style={{minHeight: '50vh', backgroundColor: "rgba(255, 228, 196, 0.5)"}}>
     <h2>Personal Entry Details for Number {entry.number}</h2>
     <p><strong>Description:</strong></p>
     <ListGroup>

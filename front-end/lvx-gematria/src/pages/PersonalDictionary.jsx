@@ -45,6 +45,7 @@ function PersonalDictionary() {
 
   const onSuccessAddEntry = (newEntry) => {
     setEntries(currentEntries => [...currentEntries, newEntry]);
+
   }
 
   const toggleAddForm = () => {
