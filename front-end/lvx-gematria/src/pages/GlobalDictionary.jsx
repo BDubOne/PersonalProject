@@ -45,7 +45,7 @@ function GlobalDictionary() {
           key={entry.id}
           number={entry.number}
           descriptionItem={entry.description && entry.description.length > 0 ? entry.description[0] : 'No description available.'}
-          relatedWords={entry.key_words && entry.key_words.length > 0 ? entry.key_words : ['No keywords']}
+          relatedWords={entry.key_words}
           dictionaryType="global"
         />
         </Col>

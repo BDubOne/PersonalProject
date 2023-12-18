@@ -62,7 +62,7 @@ function PersonalDictionary() {
             <NumberCard
               number={entry.number}
               descriptionItem={entry.personal_description?.[0] || 'No description available.'}
-              keyWords={entry.personal_key_words?.join(', ') || 'No related entries'}
+              keyWords={entry.personal_key_words}
               dictionaryType="personal"
             />
             <div className="d-flex justify-content-around mt-2">
