@@ -1,36 +1,24 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import NumberCard from '../components/NumberCard';
+
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+
+import NumberCard from '../components/NumberCard';
 import { API } from '../utilities/API';
 import { DeletePersonalEntry } from '../utilities/personalDictionaryUtilities';
+
 import AddEntryForm from '../components/AddPersonalEntry';
+import { usePersonalDictionary } from '../components/PersonalDictionaryContext';
 
 function PersonalDictionary() {
-  const [entries, setEntries] = useState([]);
+  const { entries, setEntries, fetchPersonalEntries } = usePersonalDictionary()
+
   const [showAddForm, setShowAddForm] = useState(false);
   const navigate = useNavigate();
 
-  // Moved fetchPersonalEntries outside of useEffect
-  const fetchPersonalEntries = async () => {
-    const token = localStorage.getItem("userToken");
-    API.defaults.headers.common["Authorization"] = `Token ${token}`;
-    try {
-      const response = await API.get('dictionary/personal/');
-      setEntries(response.data.results);
-      console.log("Fetched entries:", response.data.results);
-    } catch (err) {
-      console.error("Error fetching personal dictionary:", err);
-      setEntries([]);
-    }
-  };
-
-  useEffect(() => {
-    fetchPersonalEntries();
-  }, []);
 
   const handleDelete = async (number) => {
     try {
@@ -64,6 +52,7 @@ function PersonalDictionary() {
         {group.map(entry => (
           <Col md={3} key={entry.id}>
             <NumberCard
+              key={entry.id}
               number={entry.number}
               descriptionItem={Array.isArray(entry.personal_description) && entry.personal_description.length > 0
                 ? entry.personal_description[0]
