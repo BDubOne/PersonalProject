@@ -1,31 +1,49 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
+import React, { createContext, useState, useContext, useEffect, useReducer } from 'react';
 import { API } from '../utilities/API';
 
 const PersonalDetailsContext = createContext();
 
+const initialState = {
+    entry: null,
+    loading: false,
+    error: null,
+};
+
+const personalDetailsReducer = (state, action) => {
+    switch (action.type) {
+      case 'FETCH_START':
+        return { ...state, loading: true, error: null };
+      case 'FETCH_SUCCESS':
+        return { ...state, loading: false, entry: action.payload, error: null };
+      case 'FETCH_ERROR':
+        return { ...state, loading: false, error: action.payload };
+      default:
+        throw new Error(`Unhandled action type: ${action.type}`);
+    }
+  };
+
 export const usePersonalDetails = () => useContext(PersonalDetailsContext);
 
 export const PersonalDetailsProvider = ({ children }) => {
-  const [entry, setEntry] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [state, dispatch] = useReducer(personalDetailsReducer, initialState)
+
 
   const fetchEntry = async (number) => {
-    setLoading(true);
+    dispatch({ type: 'FETCH_START' });
     try {
       const token = localStorage.getItem("userToken");
       API.defaults.headers.common["Authorization"] = `Token ${token}`;
       const response = await API.get(`/dictionary/personal/${number}`);
-      setEntry(response.data);
+      dispatch({ type: 'FETCH_SUCCESS', payload: response.data });
     } catch (error) {
       console.error('Error fetching entry:', error);
-    } finally {
-      setLoading(false);
+      dispatch({ type: 'FETCH_ERROR', payload: error });
     }
   };
 
 
   return (
-    <PersonalDetailsContext.Provider value={{ entry, loading, fetchEntry }}>
+    <PersonalDetailsContext.Provider value={{ ...state, fetchEntry }}>
       {children}
     </PersonalDetailsContext.Provider>
   );

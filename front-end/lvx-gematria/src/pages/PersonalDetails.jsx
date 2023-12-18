@@ -6,40 +6,44 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import Container from 'react-bootstrap/Container';
 import Card from 'react-bootstrap/Card';
 
-import { usePersonalDictionary } from '../components/PersonalDictionaryContext'
+import { usePersonalDictionary } from '../components/PersonalDictionaryContext';
+import { usePersonalDetails } from '../components/PersonalDetailsContext';
 import { DeletePersonalEntry } from '../utilities/personalDictionaryUtilities';
 import AddPersonalEntry from '../components/AddPersonalEntry';
 import UpdateEntryForm from '../components/UpdatePersonalEntry';
-// You may also import other components as needed
+
 
 function PersonalDetails({ number, onRelatedEntrySelect }) {
-  const [entry, setEntry] = useState(null);
+  const { entry, loading, error, fetchEntry } = usePersonalDetails();
   const [ showUpdateForm, setShowUpdateForm] = useState(false)
-  const [loading, setLoading] = useState(true);
+
   const { fetchPersonalEntries } = usePersonalDictionary();
 
   const navigate = useNavigate();
 
-  
-    const fetchEntry = async () => {
-      setLoading(true);
-      try {
-        const token = localStorage.getItem("userToken");
-        API.defaults.headers.common["Authorization"] = `Token ${token}`;
-        const response = await API.get(`/dictionary/personal/${number}`);
-        setEntry(response.data);
-      } catch (error) {
-        console.error('Error fetching entry:', error);
-        // Handle error appropriately
-      } finally {
-        setLoading(false);
-      }
-    };
+
   useEffect(() => {
-    if (number !== null && number !== undefined && !isNaN(number)) {
-      fetchEntry();
+    if (number) {
+      fetchEntry(number);
     }
-  }, [number]);
+  }, [number, fetchEntry]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+  
+  if (error) {
+ 
+    if (error.response && error.response.status === 404) {
+      return <AddPersonalEntry />;
+    }
+    return <div>Error: {error.message}</div>;
+  }
+  
+  if (!entry) {
+  
+    return <AddPersonalEntry />;
+  }
 
   const handleUpdate = () => {
     setShowUpdateForm(true);
@@ -68,8 +72,6 @@ function PersonalDetails({ number, onRelatedEntrySelect }) {
    await fetchPersonalEntries();
    await fetchEntry();    
   }
-
-  if (loading) return <div>Loading...</div>;
 
   if (!entry) return <AddPersonalEntry />;
 

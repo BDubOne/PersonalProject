@@ -4,6 +4,7 @@ import { Outlet } from 'react-router-dom'
 import NavBar from './components/NavBar'
 import { API } from './utilities/API'
 import { PersonalDictionaryProvider } from './components/PersonalDictionaryContext'
+import { PersonalDetailsProvider } from './components/PersonalDetailsContext'
 
 import './App.css'
 import Container from 'react-bootstrap/Container';
@@ -32,13 +33,14 @@ function App() {
 
   return (
       <div>
-      <PersonalDictionaryProvider>
       <NavBar user={user} setUser={setUser} />
       <Container id="welcome">
-      <h3>Welcome {user ? user.email : 'Guest'}</h3>
-      </Container>
+        <h3>Welcome {user ? user.email : 'Guest'}</h3>
+        </Container>
       <Outlet context={{ user, setUser }} />
-      
+      <PersonalDictionaryProvider>
+        <PersonalDetailsProvider>       
+        </PersonalDetailsProvider>
       </PersonalDictionaryProvider>
       </div>
    
