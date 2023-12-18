@@ -20,6 +20,8 @@ import { LanguageSection } from '../components/LanguageSection'
 const CalculatorPage = () => {
   const [inputValue, setInputValue] = useState('');
   const [sum, setSum] = useState(0);
+  const [entry, setEntry] = useState(null);
+  const [loading, setLoading] = useState(false)
   const[selectedNumber, setSelectedNumber] = useState(null)
   const location = useLocation();
 

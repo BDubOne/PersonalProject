@@ -6,7 +6,7 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import Container from 'react-bootstrap/Container';
 import Card from 'react-bootstrap/Card';
 
-
+import { usePersonalDictionary } from '../components/PersonalDictionaryContext'
 import { DeletePersonalEntry } from '../utilities/personalDictionaryUtilities';
 import AddPersonalEntry from '../components/AddPersonalEntry';
 import UpdateEntryForm from '../components/UpdatePersonalEntry';
@@ -16,8 +16,8 @@ function PersonalDetails({ number, onRelatedEntrySelect }) {
   const [entry, setEntry] = useState(null);
   const [ showUpdateForm, setShowUpdateForm] = useState(false)
   const [loading, setLoading] = useState(true);
-  const [updateTrigger, setUpdateTrigger] = useState(false);
-  // const { number } = useParams();
+  const { fetchPersonalEntries } = usePersonalDictionary();
+
   const navigate = useNavigate();
 
   
@@ -31,16 +31,15 @@ function PersonalDetails({ number, onRelatedEntrySelect }) {
       } catch (error) {
         console.error('Error fetching entry:', error);
         // Handle error appropriately
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
   useEffect(() => {
     if (number !== null && number !== undefined && !isNaN(number)) {
-      setEntry(null)
-      setLoading(true)
       fetchEntry();
     }
-  }, [number, updateTrigger]);
+  }, [number]);
 
   const handleUpdate = () => {
     setShowUpdateForm(true);
@@ -56,19 +55,18 @@ function PersonalDetails({ number, onRelatedEntrySelect }) {
   const handleDelete = async () => {
     try {
       await DeletePersonalEntry(number);
-      setUpdateTrigger(prev => !prev);
+      fetchPersonalEntries();
+      fetchEntry();
       navigate('/personal-dictionary/');
     } catch (error) {
       console.error("Error deleting entry:", error);
     }
-    navigate('/personal-dictionary/'); // Redirect after deletion
   };
 
   const handleUpdateSuccess = async (updatedData) => {
    setShowUpdateForm(false);
-   setEntry(updatedData);
-   await PaymentResponse.reFetchPersonalEntry();
-    
+   await fetchPersonalEntries();
+   await fetchEntry();    
   }
 
   if (loading) return <div>Loading...</div>;
