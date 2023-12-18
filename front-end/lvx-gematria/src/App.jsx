@@ -38,7 +38,7 @@ function App() {
       <h3>Welcome {user ? user.email : 'Guest'}</h3>
       </Container>
       <Outlet context={{ user, setUser }} />
-
+      
       </PersonalDictionaryProvider>
       </div>
    
