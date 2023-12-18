@@ -25,19 +25,19 @@ const CalculatorPage = () => {
   const[selectedNumber, setSelectedNumber] = useState(null)
   const location = useLocation();
 
-  const reFetchPersonalEntry = async () => {
-    setLoading(true);
-    try {
-      const token = localStorage.getItem("userToken");
-      API.defaults.headers.common["Authorization"] = `Token ${token}`;
-      const response = await API.get(`/dictionary/personal/${number}`);
-      setEntry(response.data);
-    } catch (error) {
-      console.error('Error fetching entry:', error);
-      // Handle error appropriately
-    }
-    setLoading(false);
-  };
+  // const reFetchPersonalEntry = async () => {
+  //   setLoading(true);
+  //   try {
+  //     const token = localStorage.getItem("userToken");
+  //     API.defaults.headers.common["Authorization"] = `Token ${token}`;
+  //     const response = await API.get(`/dictionary/personal/${number}`);
+  //     setEntry(response.data);
+  //   } catch (error) {
+  //     console.error('Error fetching entry:', error);
+  //     // Handle error appropriately
+  //   }
+  //   setLoading(false);
+  // };
 
   const handleNumberSelect = (number) => {
     setSelectedNumber(number);
@@ -102,7 +102,7 @@ const CalculatorPage = () => {
             <GlobalDetails number={selectedNumber} onRelatedEntrySelect={handleRelatedEntrySelect} />
           )}
       {selectedNumber && !isNaN(selectedNumber) && (
-            <PersonalDetails number={selectedNumber} onRelatedEntrySelect={handleRelatedEntrySelect} reFetchPersonalEntry={reFetchPersonalEntry} />
+            <PersonalDetails number={selectedNumber} onRelatedEntrySelect={handleRelatedEntrySelect} />
           )}
       </div>
       <div style={{marginTop: "5rem"}}>     

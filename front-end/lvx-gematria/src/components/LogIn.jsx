@@ -11,6 +11,7 @@ function LogIn({ setUser }) {  // Assuming setUser is passed as a prop
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
+        console.log(email, password)
         e.preventDefault();
         try {
             const response = await API.post('users/login/', { email, password });

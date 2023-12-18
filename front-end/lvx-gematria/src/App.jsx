@@ -37,14 +37,13 @@ function App() {
     <Container id="welcome">
       <h3>Welcome {user ? user.email : 'Guest'}</h3>
     </Container>
-    <PersonalDictionaryProvider>
-      <PersonalDetailsProvider>
+    <PersonalDetailsProvider>
+      <PersonalDictionaryProvider>
         <Outlet context={{ user, setUser }} />
-      </PersonalDetailsProvider>
-    </PersonalDictionaryProvider>
+      </PersonalDictionaryProvider>
+    </PersonalDetailsProvider>
   </div>
-   
-  );
+);
 }
 
 export default App;

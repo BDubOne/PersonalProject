@@ -4,7 +4,7 @@ import { API } from '../utilities/API';
 const PersonalDictionaryContext = createContext({
     entries: [],
     setEntries: () => {},
-    isLoading: true,
+    isLoading: false,
     fetchPersonalEntries: () => {}
   });
 
@@ -15,10 +15,17 @@ export const PersonalDictionaryProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchPersonalEntries = async () => {
+    const token = localStorage.getItem("userToken");
+    if (!token) {
+      setIsLoading(false);
+      return;
+    }
+
     setIsLoading(true);
+    API.defaults.headers.common["Authorization"] = `Token ${token}`;
+    
     try {
-      const token = localStorage.getItem("userToken");
-      API.defaults.headers.common["Authorization"] = `Token ${token}`;
+
       const response = await API.get('dictionary/personal/');
       setEntries(response.data.results);
     } catch (error) {
