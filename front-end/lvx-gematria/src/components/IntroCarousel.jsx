@@ -16,7 +16,7 @@ import Slide13 from '../images/LVX-Gematria-Presentation/Presentation.013.jpeg'
 
 export const IntroCarousel=() => {
     return (
-      <Carousel>
+      <Carousel style={{borderRadius: "10px black solid"}}>
         <Carousel.Item>
           <img
             className="d-block w-100"
