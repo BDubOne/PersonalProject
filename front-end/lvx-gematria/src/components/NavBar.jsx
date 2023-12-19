@@ -18,7 +18,7 @@ function NavBar({ user, setUser }) {
     };
     
     return (
-        <Navbar expand="lg" className="bg-body-tertiary">
+        <Navbar style={{paddingBottom: "2%", padding: "2%"}}expand="lg" className="bg-body-tertiary">
             <Container >
                 <Navbar.Brand>LVX-Gematria</Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />

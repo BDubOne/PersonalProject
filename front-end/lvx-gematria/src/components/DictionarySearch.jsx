@@ -64,68 +64,50 @@ function DictionarySearch({ onSelectedNumberChange }) {
   
     
 
-const handleCheckboxChange = (type, item, isChecked) => {
-  setSelectedItems(prev => {
-    const updatedItems = isChecked 
-      ? [...prev[type], item] 
-      : prev[type].filter(i => i !== item);
-
-    return { ...prev, [type]: updatedItems };
-  });
-};
-
 
   const renderMeanings = () => {
     return dictionaryData.meanings.map((meaning, idx) => (
-      <ListGroup.Item className="dictsearch" key={idx}>
-        <div>Part of Speech: {meaning.partOfSpeech}</div>
-        {meaning.definitions.map((def, index) => (
-            <div key={`${idx}-${index}`}>
-                <Checkbox
-                    className="dictsearch"
-                    checked={selectedItems.descriptions.includes(def.definition)}
-                    onChange={(e) => handleCheckboxChange('definitions', def.definition, e.target.checked)}
-                />
-                Definition: {def.definition}
-            </div>
+      <ListGroup className="dictsearch" key={idx}>
+        <strong>Part of Speech: {meaning.partOfSpeech}</strong>
+        <strong>Definitions:</strong>
+        {meaning.definitions.map((def, index) => (            
+            <ListGroup.Item className="dictsearch" key={`${idx}-${index}`}>
+  
+              {def.definition}
+            </ListGroup.Item>
         ))}
+        <strong>Synonyms:</strong>
         {meaning.synonyms.map((synonym, synIdx) => (
-          <div key={synIdx}>
-            <Checkbox
-              className="dictsearch"
-              checked={selectedItems.keyWords.includes(synonym)}
-              onChange={(e) => handleCheckboxChange('keyWords', synonym, e.target.checked)}
-            />
-            Synonym: {synonym}
-          </div>
+          <ListGroup.Item className="dictsearch" key={synIdx}>
+            {synonym}
+          </ListGroup.Item>
         ))}
+        <strong>Antonyms:</strong>
         {meaning.antonyms.map((antonym, antIdx) => (
-          <div key={antIdx}>
-            <Checkbox
-              className="dictsearch"
-              checked={selectedItems.keyWords.includes(antonym)}
-              onChange={(e) => handleCheckboxChange('keyWords', antonym, e.target.checked)}
-            />
+          <ListGroup.Item className="dictsearch" key={antIdx}>
             Antonym: {antonym}
-          </div>
+          </ListGroup.Item>
         ))}
-      </ListGroup.Item>
+      </ListGroup>
     ));
   };
 
   const renderNumberData = (data, dataType) => {
-    return data.map((item, idx) => (
-      <ListGroup.Item className="dictsearch" key={idx}>
-        <Checkbox
-          className="dictsearch"
-          checked={selectedItems.descriptions.includes(item)}
-          onChange={(e) => handleCheckboxChange('descriptions', item, e.target.checked)}
-        />
-        {dataType}: {item}
-      </ListGroup.Item>
-    ));
+    if (data.length === 0) {
+      return null; // Don't render anything if there's no data
+    }
+  
+    return (
+      <ListGroup className="dictsearch">
+        <strong>{dataType}:</strong>
+        {data.map((item, idx) => (
+          <ListGroup.Item className="dictsearch" key={idx}>
+            {item}
+          </ListGroup.Item>
+        ))}
+      </ListGroup>
+    );
   };
-
 
   
 
@@ -172,7 +154,6 @@ const handleCheckboxChange = (type, item, isChecked) => {
             {renderNumberData(triviaData, 'Trivia')}
             {renderNumberData(dateData, 'Date Fact')}
           </ListGroup>
-          <Button>Add/Update My Entry</Button>
         </Card.Body>
       </Card>
     )}

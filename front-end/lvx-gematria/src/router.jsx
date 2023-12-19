@@ -56,21 +56,7 @@ const router = createBrowserRouter([
                 element: <DictionarySearch />,
 
             },
-            {
-                path: "dictionary-query/",
-                element: <DictionaryQuery />,
-
-            },
-            {
-                path: "dictionary-query/:query/",
-                element: <DictionaryQuery />,
-
-            },
-            {
-                path: "dictionary-query/?query=:query/",
-                element: <DictionaryQuery />,
-
-            },
+            
         ],
         errorElement: <NotFoundPage />
     } 
