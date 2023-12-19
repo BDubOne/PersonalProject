@@ -21,8 +21,11 @@ class GlobalDictionaryList(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]    
     
     def perform_create(self, serializer):
-        
-        serializer.save()
+        if serializer.is_valid():
+            serializer.save()
+        else:
+            # Handle validation errors
+            return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
 class GlobalDictionaryDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = DictionaryEntry.objects.all()
@@ -30,35 +33,46 @@ class GlobalDictionaryDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly] 
     lookup_field = 'number'
 
-    # @ratelimit(key=user_or_admin_key, rate='30/h', method="GET", block=True)
     def get_permissions(self):
         if self.request.method in ['PUT', 'DELETE']:
-            return [permissions.IsAdminUser()]
-        return [permissions.IsAuthenticated()]
+            self.permission_classes = [permissions.IsAdminUser]
+        else:
+            self.permission_classes = [permissions.IsAuthenticated]
+        return super(GlobalDictionaryDetail, self).get_permissions()
+
 
 
 class GlobalDictionaryQuery(generics.ListAPIView):   
     serializer_class = DictionaryEntrySerializer
     permission_classes = [permissions.IsAuthenticated]
     
-    # @ratelimit(key=user_or_admin_key, rate='30/h', method="GET", block=True)
+
     def get_queryset(self):
         query = self.kwargs.get('query')
         queryset = DictionaryEntry.objects.all().order_by('number')
+        try:
+            if query.isdigit():
+                related_entries = RelatedEntry.objects.filter(to_entry__number=int(query)).values_list('from_entry__number', flat=True)
+                queryset = queryset.filter(number__in=related_entries)
 
-        if query.isdigit():
-            related_entries = RelatedEntry.objects.filter(to_entry__number=int(query)).values_list('from_entry__number', flat=True)
-            queryset = queryset.filter(number__in=related_entries)
-        else:
-            queryset = queryset.filter(key_words__contains=[query])
-        
-        return queryset
+                # Create a set of unique numbers including the query number
+                numbers = set(related_entries) | {int(query)}
+
+                # Filter queryset by the set of numbers
+                queryset = queryset.filter(number__in=numbers)
+            else:
+                queryset = queryset.filter(key_words__contains=[query])
+            
+            return queryset
+        except DictionaryEntry.DoesNotExist:
+            return Response(status=HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response(str(e), status=HTTP_400_BAD_REQUEST)
         
 class PersonalDictionaryListCreate(generics.ListCreateAPIView):
     serializer_class = PersonalDictionaryEntrySerializer
     permission_classes = [permissions.IsAuthenticated]
-    # @ratelimit(key=user_or_admin_key, rate='30/h', method="GET", block=True)
-    # @ratelimit(key=user_or_admin_key, rate='5/d', method="GET", block=True)
+
 
     def get_queryset(self):
         return PersonalDictionaryEntry.objects.filter(student=self.request.user)
@@ -72,10 +86,13 @@ class PersonalDictionaryDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [permissions.IsAuthenticated]
     lookup_field = "number"
    
-    # @ratelimit(key=user_or_admin_key, rate='30/h', method="GET", block=True)
-    # @ratelimit(key=user_or_admin_key, rate='5/d', method="GET", block=True)
+
     def get_queryset(self):
-        return PersonalDictionaryEntry.objects.filter(student=self.request.user)
+        try:
+
+            return PersonalDictionaryEntry.objects.filter(student=self.request.user)
+        except PersonalDictionaryEntry.DoesNotExist:
+            raise Http404("Personal dictionary entry not found")
 
     
 
@@ -88,15 +105,24 @@ class PersonalDictionaryQuery(generics.ListAPIView):
         query = self.kwargs.get('query')
         queryset = PersonalDictionaryEntry.objects.filter(student=self.request.user)
 
-        if query.isdigit():
-            # Query is a number, filter by personal related entry number
-            related_entries = PersonalRelatedEntry.objects.filter(to_personal_entry__number=int(query), from_personal_entry__student=self.request.user).values_list('from_personal_entry__number', flat=True)
-            queryset = queryset.filter(number__in=related_entries)
-        else:
-            # Query is a string, filter by personal keyword
-            queryset = queryset.filter(personal_key_words__contains=[query])
+        try:
+
+            if query.isdigit():
+                # Query is a number, filter by personal related entry number
+                related_entries = PersonalRelatedEntry.objects.filter(to_personal_entry__number=int(query), from_personal_entry__student=self.request.user).values_list('from_personal_entry__number', flat=True)
+                # Create a set of unique numbers including the query number
+                numbers = set(related_entries) | {int(query)}
+
+                # Filter queryset by the set of numbers
+                queryset = queryset.filter(number__in=numbers)
+            else:
+                # Query is a string, filter by personal keyword
+                queryset = queryset.filter(personal_key_words__contains=[query])
+            
+            return queryset
         
-        return queryset
+        except Exception as e:
+            raise Http404("error occured while processing query")
 
 
 

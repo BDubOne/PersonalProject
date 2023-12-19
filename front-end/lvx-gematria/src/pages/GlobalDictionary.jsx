@@ -26,12 +26,19 @@ function GlobalDictionary() {
   const fetchEntries = async () => {
     const token = localStorage.getItem("userToken");        
     API.defaults.headers.common["Authorization"] = `Token ${token}`;
-    const response = await API.get('/dictionary/', {
-      params: { page: currentPage }
-    });
-    setEntries(response.data.results);
-    setTotalPages(response.data.total_pages); // Adjust according to your API response structure
-  };
+    try {
+      const response = await API.get('/dictionary/', { params: { page: currentPage } });
+      if (response.data && response.data.results) {
+          setEntries(response.data.results);
+          setTotalPages(response.data.total_pages);
+      } else {
+          setEntries([]);
+      }
+  } catch (error) {
+      console.error('Error fetching data:', error);
+      setEntries([]);
+  }
+};
 
   useEffect(() => {
     if (!isSearching) {
@@ -110,14 +117,27 @@ function GlobalDictionary() {
         <>
           <h2>Global Dictionary Results</h2>
           <Row className="query-results">
+            
             {globalResults.map(entry => (
-              <NumberCard key={entry.id} {...entry} dictionaryType="global" />
+            <NumberCard
+          key={entry.id}
+          number={entry.number}
+          descriptionItem={entry.description && entry.description.length > 0 ? entry.description[0] : 'No description available.'}
+          relatedWords={entry.key_words}
+          dictionaryType="global"
+          />
             ))}
           </Row>
           <h2>Personal Dictionary Results</h2>
           <Row className="query-results">
             {personalResults.map(entry => (
-              <NumberCard key={entry.id} {...entry} dictionaryType="personal" />
+              <NumberCard
+              key={entry.id}
+              number={entry.number}
+              descriptionItem={entry.description && entry.description.length > 0 ? entry.description[0] : 'No description available.'}
+              relatedWords={entry.key_words}
+              dictionaryType="personal"
+              />
             ))}
           </Row>
         </>
