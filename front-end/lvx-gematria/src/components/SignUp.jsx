@@ -1,8 +1,10 @@
+import { API } from '../utilities/API';
+
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { useState } from 'react';
 
-import { API } from '../utilities/API';
+
 
 function SignUp({onSignupSuccess}) {
     const [email, setEmail] = useState('');

@@ -1,13 +1,14 @@
 import { createBrowserRouter } from "react-router-dom"
+
 import App from "./App";
 
 import GlobalDictionary  from './pages/GlobalDictionary';
 import GlobalDetails from './pages/GlobalDetails';
 import PersonalDetails from './pages/PersonalDetails';
 import PersonalDictionary from './pages/PersonalDictionary';
-import DictionarySearch from "./components/DictionarySearch";
 import CalculatorPage from "./pages/CalculatorPage";
-import DictionaryQuery from "./pages/DictionaryQuery";
+
+import About from "./pages/AboutPage";
 
 
 import { Home } from './pages/Home';
@@ -52,8 +53,8 @@ const router = createBrowserRouter([
 
             },
             {
-                path: "dictionary-search/",
-                element: <DictionarySearch />,
+                path: "about/",
+                element: <About />,
 
             },
             

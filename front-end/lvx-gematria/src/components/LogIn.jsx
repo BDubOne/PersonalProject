@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useOutletContext } from 'react-router-dom';
 
 import { API } from '../utilities/API';
 
-function LogIn({ setUser }) {  // Assuming setUser is passed as a prop
+function LogIn() {  
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const { setUser } = useOutletContext();
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
@@ -16,7 +17,7 @@ function LogIn({ setUser }) {  // Assuming setUser is passed as a prop
         try {
             const response = await API.post('users/login/', { email, password });
             if (response.data.token) {
-                setUser(response.data.user); // Update user state
+                setUser(response.data.user); 
                 localStorage.setItem('userToken', response.data.token);
                 API.defaults.headers.common["Authorization"] = `Token ${response.data.token}`;
                 setUser(response.data)

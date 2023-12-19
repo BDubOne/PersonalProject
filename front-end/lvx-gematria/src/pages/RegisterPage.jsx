@@ -1,7 +1,9 @@
+import { useEffect, useState } from "react";
 import { useNavigate, useOutletContext } from "react-router-dom";
+
 import SignUp from "../components/SignUp";
 import LogIn from "../components/LogIn";
-import { useEffect, useState } from "react";
+
 import Button from "react-bootstrap/esm/Button";
 
 export const RegisterPage = () => {
@@ -17,7 +19,7 @@ export const RegisterPage = () => {
   }, [user]);
 
   const handleSignupSuccess = () => {
-    setSignupSuccessful(true); // Set signup success to true
+    setSignupSuccessful(true);
     setExistingUser(true);
   }
     return (

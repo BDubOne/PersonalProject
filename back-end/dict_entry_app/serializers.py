@@ -7,9 +7,8 @@ from .models import DictionaryEntry, PersonalDictionaryEntry, RelatedEntry, Pers
 class RelatedEntrySerializer(serializers.ModelSerializer):
     class Meta:
         model = RelatedEntry
-        fields = ['from_entry', 'to_entry']  # Assuming these are the field names in RelatedEntry model
+        fields = ['from_entry', 'to_entry'] 
 
-    # Optional: Add validation to ensure 'to_entry' exists
     def validate_to_entry(self, value):
         if not DictionaryEntry.objects.filter(number=value).exists():
             raise serializers.ValidationError("DictionaryEntry with the provided number does not exist.")
@@ -66,6 +65,7 @@ class DictionaryEntrySerializer(serializers.ModelSerializer):
                     # Add the entry
                     to_entry, _ = DictionaryEntry.objects.get_or_create(number=number)
                     RelatedEntry.objects.get_or_create(from_entry=instance, to_entry=to_entry)
+
         # Custom handling for 'description' field
         if 'description' in validated_data:
             if isinstance(instance.description, str):
@@ -94,7 +94,7 @@ class DictionaryEntrySerializer(serializers.ModelSerializer):
         
         
 
-        # Update other fields as usual
+ 
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
 

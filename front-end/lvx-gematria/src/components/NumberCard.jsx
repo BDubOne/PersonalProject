@@ -1,14 +1,16 @@
+import { useNavigate } from 'react-router-dom';
+
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
-import { useNavigate } from 'react-router-dom';
+
 
 function NumberCard({ number, descriptionItem, keyWords }) {
   const navigate = useNavigate();
 
   const navigateToDetails = () => {
     const path = '/lvx-calculator/';
-    // Explicitly check if number is not null or undefined
-    if (number !== null && number !== undefined) {
+
+    if (number) {
         navigate(path, { state: { selectedNumber: number } });
     } else {
         console.error("Invalid number for navigation:");

@@ -5,10 +5,10 @@ import Slide2 from '../images/LVX-Gematria-Presentation/Presentation.002.jpeg'
 import Slide3 from '../images/LVX-Gematria-Presentation/Presentation.003.jpeg'
 import Slide4 from '../images/LVX-Gematria-Presentation/Presentation.004.jpeg' 
 import Slide5 from '../images/LVX-Gematria-Presentation/Presentation.005.jpeg'
-import Slide6 from '../images/LVX-Gematria-Presentation/Presentation.006.jpeg'
+
 import Slide7 from '../images/LVX-Gematria-Presentation/Presentation.007.jpeg'
 import Slide8 from '../images/LVX-Gematria-Presentation/Presentation.008.jpeg'
-import Slide9 from '../images/LVX-Gematria-Presentation/Presentation.009.jpeg'
+
 import Slide10 from '../images/LVX-Gematria-Presentation/Presentation.010.jpeg'
 import Slide11 from '../images/LVX-Gematria-Presentation/Presentation.011.jpeg'
 import Slide12 from '../images/LVX-Gematria-Presentation/Presentation.012.jpeg'

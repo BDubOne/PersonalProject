@@ -5,7 +5,7 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Button from 'react-bootstrap/Button';
-import NavLink from 'react-bootstrap/NavLink'; // Import NavLink
+import NavLink from 'react-bootstrap/NavLink';
 
 function NavBar({ user, setUser }) {
     const navigate = useNavigate();
@@ -30,6 +30,7 @@ function NavBar({ user, setUser }) {
                                 <NavLink as={Link} to="/global-dictionary/" className="mx-2">Global Dictionary</NavLink>
                                 <NavLink as={Link} to="/personal-dictionary/" className="mx-2">Personal Dictionary</NavLink>
                                 <NavLink as={Link} to="/lvx-calculator/" className="mx-2">LVX Calculator</NavLink>
+                                <NavLink as={Link} to="/about/" className="mx-2">About</NavLink>
                                 <Button onClick={logOut} variant="danger" className="mx-2">
                                     Log Out
                                 </Button>

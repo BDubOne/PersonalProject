@@ -1,6 +1,8 @@
 
 import { useState } from 'react';
 import { API } from '../utilities/API';
+
+
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
@@ -8,7 +10,7 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import Card from 'react-bootstrap/Card';
 import FormControl from 'react-bootstrap/FormControl';
 import InputGroup from 'react-bootstrap/InputGroup';
-import Checkbox from 'react-bootstrap/FormCheck';
+
 
 function DictionarySearch({ onSelectedNumberChange }) {
   const [word, setWord] = useState('');
@@ -17,7 +19,7 @@ function DictionarySearch({ onSelectedNumberChange }) {
   const [mathData, setMathData] = useState([]);
   const [triviaData, setTriviaData] = useState([]);
   const [dateData, setDateData] = useState([]);
-  const [selectedItems, setSelectedItems] = useState({ descriptions: [], keyWords: []});
+
   
 
   const fetchWordData = async () => {
@@ -94,7 +96,7 @@ function DictionarySearch({ onSelectedNumberChange }) {
 
   const renderNumberData = (data, dataType) => {
     if (data.length === 0) {
-      return null; // Don't render anything if there's no data
+      return null;
     }
   
     return (

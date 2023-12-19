@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+
 import { API } from '../utilities/API';
 import NumberCard from '../components/NumberCard';
+
+
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -14,13 +16,12 @@ function GlobalDictionary() {
   const [entries, setEntries] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
-  const [searchResults, setSearchResults] = useState([]);
   const [query, setQuery] = useState('');
   const [globalResults, setGlobalResults] = useState([]);
   const [personalResults, setPersonalResults] = useState([]);  
   const [isSearching, setIsSearching] = useState(false);
 
-  const navigate = useNavigate();
+
 
  
   const fetchEntries = async () => {

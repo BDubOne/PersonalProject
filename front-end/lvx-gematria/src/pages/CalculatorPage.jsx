@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 import { useLocation } from 'react-router-dom'
 import { characterValues } from '../utilities/characterValues'
@@ -6,7 +6,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
-import Button from 'react-bootstrap/Button';
+
 import Form from 'react-bootstrap/Form';
 
 import GlobalDetails from './GlobalDetails'
@@ -25,19 +25,6 @@ const CalculatorPage = () => {
   const[selectedNumber, setSelectedNumber] = useState(null)
   const location = useLocation();
 
-  // const reFetchPersonalEntry = async () => {
-  //   setLoading(true);
-  //   try {
-  //     const token = localStorage.getItem("userToken");
-  //     API.defaults.headers.common["Authorization"] = `Token ${token}`;
-  //     const response = await API.get(`/dictionary/personal/${number}`);
-  //     setEntry(response.data);
-  //   } catch (error) {
-  //     console.error('Error fetching entry:', error);
-  //     // Handle error appropriately
-  //   }
-  //   setLoading(false);
-  // };
 
   const handleNumberSelect = (number) => {
     setSelectedNumber(number);

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { API } from '../utilities/API';
-import { useLocation } from 'react-router-dom'
+
 import Container from 'react-bootstrap/Container';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
@@ -9,8 +9,7 @@ import ListGroup from 'react-bootstrap/ListGroup';
 function GlobalDetails({number, onRelatedEntrySelect }) {
   const [entry, setEntry] = useState(null);
   const [descriptionIndex, setDescriptionIndex] = useState(0);
-  // const location = useLocation();
-  // const number = location.state?.selectedNumber
+
   
       const fetchEntry = async () => {
         const token = localStorage.getItem("userToken");
