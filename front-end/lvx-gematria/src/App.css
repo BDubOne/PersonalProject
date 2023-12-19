@@ -85,7 +85,7 @@ body {
   
   padding-left: 13%;
   padding-right: 13%;
-  Padding-top: 5%;
+  padding-top: 5%;
   border: 1px solid gray;
 
   @media (max-width: 768px) {
