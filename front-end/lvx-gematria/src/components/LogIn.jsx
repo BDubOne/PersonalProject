@@ -20,8 +20,7 @@ function LogIn({ setUser }) {  // Assuming setUser is passed as a prop
                 localStorage.setItem('userToken', response.data.token);
                 API.defaults.headers.common["Authorization"] = `Token ${response.data.token}`;
                 setUser(response.data)
-                console.log(response.data)
-                console.log(response.data.token)
+                console.log("Login successful")
                 navigate("/");
             } else {
                 alert("Login failed. Please check your credentials.");

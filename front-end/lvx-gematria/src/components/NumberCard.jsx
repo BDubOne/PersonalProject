@@ -11,7 +11,7 @@ function NumberCard({ number, descriptionItem, keyWords }) {
     if (number !== null && number !== undefined) {
         navigate(path, { state: { selectedNumber: number } });
     } else {
-        console.error("Invalid number for navigation:", number);
+        console.error("Invalid number for navigation:");
     }
 };
 

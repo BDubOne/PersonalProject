@@ -12,7 +12,7 @@ function SignUp({onSignupSuccess}) {
         e.preventDefault();
         try {
             const response = await API.post('users/signup/', { email, password });
-            console.log("sign up successful:", response.data);
+            console.log("sign up successful:");
             onSignupSuccess()
         } catch (err) {
             console.error('error during signup:', err);
