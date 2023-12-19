@@ -78,7 +78,11 @@ class PersonalDictionaryListCreate(generics.ListCreateAPIView):
         return PersonalDictionaryEntry.objects.filter(student=self.request.user)
 
     def perform_create(self, serializer):
-        serializer.save(student=self.request.user)
+        if serializer.is_valid():
+            serializer.save(student=self.request.user)
+        else:
+            # Handle validation errors
+            return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
 # For retrieving, updating, and destroying individual entries
 class PersonalDictionaryDetail(generics.RetrieveUpdateDestroyAPIView):
