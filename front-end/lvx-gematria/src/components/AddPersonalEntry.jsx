@@ -35,8 +35,7 @@ function AddEntryForm(props) {
         };
 
         try {
-            const token = localStorage.getItem("userToken");
-            API.defaults.headers.common["Authorization"] = `Token ${token}`;
+
 
             const response = await API.post('dictionary/personal/', formattedData);
             fetchPersonalEntries();

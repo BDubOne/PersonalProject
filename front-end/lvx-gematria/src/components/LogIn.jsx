@@ -11,27 +11,23 @@ function LogIn() {
     const { setUser } = useOutletContext();
     const navigate = useNavigate();
 
-    const handleSubmit = async (e) => {
-        console.log(email, password)
-        e.preventDefault();
-        try {
-            const response = await API.post('users/login/', { email, password });
-            if (response.data.token) {
-                setUser(response.data.user); 
-                localStorage.setItem('userToken', response.data.token);
-                API.defaults.headers.common["Authorization"] = `Token ${response.data.token}`;
-                setUser(response.data)
-                console.log("Login successful")
-                navigate("/");
-            } else {
-                alert("Login failed. Please check your credentials.");
-            }
-        } catch (error) {
-            console.error('Login error:', error);
-            alert("Login error. Please try again.");
+const handleSubmit = async (e) => {
+    console.log(email, password);
+    e.preventDefault();
+    try {
+        const response = await API.post('users/login/', { email, password });
+        if (response.data.student) { // Assuming the key is 'student' in your response
+            setUser(response.data.student); // Set the user state
+            console.log(`Login successful,${response.data.student}`);
+            navigate("/");
+        } else {
+            alert("Login failed. Please check your credentials.");
         }
-    };
-
+    } catch (error) {
+        console.error('Login error:', error);
+        alert("Login error. Please try again.");
+    }
+};
     return (
         <Form onSubmit={handleSubmit}>
             <h4>Log In</h4>

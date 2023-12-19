@@ -5,24 +5,34 @@ import Form from 'react-bootstrap/Form';
 import { useState } from 'react';
 
 
-
-function SignUp({onSignupSuccess}) {
+function SignUp({ onSignupSuccess }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState(''); // To store and display any error messages
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setError(''); // Reset error message
         try {
             const response = await API.post('users/signup/', { email, password });
-            console.log("sign up successful:");
-            onSignupSuccess()
+            if (response.status === 201) {
+                console.log("Sign up successful");
+                onSignupSuccess();
+                setEmail('');
+                setPassword('');
+            } else {
+                // Handle non-successful responses, if any
+                console.log("Sign up not successful:", response.data);
+                setError('Sign up not successful. Please try again.');
+            }
         } catch (err) {
-            console.error('error during signup:', err);
+            console.error('Error during signup:', err);
+            setError('An error occurred during signup. Please try again.');
         }
     };
-
-    return (
+return (
         <Form onSubmit={handleSubmit}>
+	 {error && <div className="alert alert-danger">{error}</div>}
             <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>Email address</Form.Label>
                 <Form.Control 

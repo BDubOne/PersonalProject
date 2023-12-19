@@ -1,9 +1,7 @@
 import { API } from './API';
 
 export const AddPersonalEntry = async (entryData) => {
-    try {
-        const token = localStorage.getItem("userToken");
-        API.defaults.headers.common["Authorization"] = `Token ${token}`;
+    try {       
 
         const response = await API.post('dictionary/personal/', entryData);
         console.log("Entry added:", response.data);
@@ -16,8 +14,6 @@ export const AddPersonalEntry = async (entryData) => {
 
 export const UpdatePersonalEntry = async (updatedEntryData) => {
     try {
-        const token = localStorage.getItem("userToken");
-        API.defaults.headers.common["Authorization"] = `Token ${token}`;
 
         const response = await API.put(`dictionary/personal/${number}/`, updatedEntryData);
         console.log("Entry updated:", response.data);
@@ -30,8 +26,7 @@ export const UpdatePersonalEntry = async (updatedEntryData) => {
 
 export const DeletePersonalEntry = async (number) => {
     try {
-        const token = localStorage.getItem("userToken");
-        API.defaults.headers.common["Authorization"] = `Token ${token}`;
+        
 
         await API.delete(`dictionary/personal/${number}/`);
         console.log("Entry deleted");

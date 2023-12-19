@@ -16,21 +16,27 @@ from rest_framework.status import (
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import authenticate
+from .utilities import HttpOnlyTokenAuthentication
 
-
-# Create your views here.
 class SignUp(APIView):
     def post(self, request):
         try:
             request.data["username"] = request.data["email"]
             student = Student.objects.create_user(**request.data)
+
+            # Create a token and set it in an HTTP-only cookie
             token = Token.objects.create(user=student)
-            return Response({"student": student.email, "token": token.key}, status=HTTP_201_CREATED)
+            life_time = datetime.now() + timedelta(days=7)
+            format_life_time = life_time.strftime("%a, %d %b %Y %H:%M:%S GMT")
+            response = Response({"student": student.email}, status=HTTP_201_CREATED)
+            response.set_cookie(key="token", value=token.key, httponly=True, secure=True, samesite="Lax", expires=format_life_time)
+
+            return response
+
         except IntegrityError:
             return Response("User with this email already exists", status=HTTP_400_BAD_REQUEST)
         except ValidationError as e:
             return Response(e.detail, status=HTTP_400_BAD_REQUEST)
-
 
 class LogIn(APIView):
     def post(self, request):
@@ -44,25 +50,31 @@ class LogIn(APIView):
 
         if student:
             token, created = Token.objects.get_or_create(user=student)
-            return Response({"token": token.key, "student": student.email})
+            life_time = datetime.now() + timedelta(days=7)
+            format_life_time = life_time.strftime("%a, %d %b %Y %H:%M:%S GMT")
+            response = Response({"student": {"email": student.email}})
+            response.set_cookie(key="token", value=token.key, httponly=True, secure=True, samesite="Lax", expires=format_life_time)
+            return response
         else:
-            return Response("No student matching credentials", status=HTTP_404_NOT_FOUND)
+            return Response("Something went wrong", status=HTTP_400_BAD_REQUEST)
 
 class LogOut(APIView):
-    authentication_classes = [TokenAuthentication]
+    authentication_classes = [HttpOnlyTokenAuthentication]
     permission_classes = [IsAuthenticated]
     
    
     def post(self, request):
         request.user.auth_token.delete()
-        return Response(status=HTTP_204_NO_CONTENT)
+        response = Response(status=HTTP_204_NO_CONTENT)
+        response.delete_cookie("token")
+        return response
 
 class Info(APIView):
-    authentication_classes = [TokenAuthentication]
+    authentication_classes = [HttpOnlyTokenAuthentication]
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        return Response({"email": request.user.email})
+        return Response({"email": request.student.email})
     
 class MasterSignUp(APIView):
     def post(self, request):

@@ -10,13 +10,19 @@ import NavLink from 'react-bootstrap/NavLink';
 function NavBar({ user, setUser }) {
     const navigate = useNavigate();
 
-    const logOut = () => {
-        localStorage.removeItem("token");
-        delete API.defaults.headers.common["Authorization"];
-        setUser(null);
-        navigate('/');
-    };
-    
+   const logOut = async () => {
+        try {
+            // Make a request to the back-end to log out
+            await API.post('users/logout/');
+            
+            // Clear user state
+            setUser(null);
+
+            // Redirect to home page
+            navigate('/');
+        } catch (error) {
+            console.error('Logout error:', error);
+
     return (
         <Navbar style={{paddingBottom: "2%", padding: "2%"}}expand="lg" className="bg-body-tertiary">
             <Container >
