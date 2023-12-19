@@ -5,9 +5,11 @@ import NavBar from './components/NavBar'
 import { API } from './utilities/API'
 import { PersonalDictionaryProvider } from './components/PersonalDictionaryContext'
 import { PersonalDetailsProvider } from './components/PersonalDetailsContext'
+import TutorialModal from './components/TutorialModal';
 
 import './App.css'
 import Container from 'react-bootstrap/Container';
+
 
 
 function App() {
@@ -36,6 +38,7 @@ function App() {
     <NavBar user={user} setUser={setUser} />
     <Container id="welcome">
       <h3>Welcome {user ? user.email : 'Guest'}</h3>
+      <TutorialModal />
     </Container>
     <PersonalDetailsProvider>
       <PersonalDictionaryProvider>
