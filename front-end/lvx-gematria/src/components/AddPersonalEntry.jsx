@@ -5,6 +5,8 @@ import { API } from '../utilities/API';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
+import { usePersonalDictionary } from './PersonalDictionaryContext';
+
 function AddEntryForm(props) {
     const [entryData, setEntryData] = useState({
         number: '',
@@ -14,6 +16,7 @@ function AddEntryForm(props) {
     });
     const { user } = useOutletContext();
     const navigate = useNavigate()
+    const { fetchPersonalEntries } = usePersonalDictionary();
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -36,8 +39,11 @@ function AddEntryForm(props) {
             API.defaults.headers.common["Authorization"] = `Token ${token}`;
 
             const response = await API.post('dictionary/personal/', formattedData);
-            console.log("Entry added:", response.data);
+            fetchPersonalEntries();
+            if(props.onSuccess) {
             props.onSuccess(formattedData);
+            }
+            
             setEntryData({ number: '', personal_description: '', personal_key_words: '', personal_related_entries: '' });
             
             navigate('/personal-dictionary/');

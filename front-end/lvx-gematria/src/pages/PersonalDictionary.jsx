@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
@@ -18,25 +18,28 @@ function PersonalDictionary() {
 
   const [showAddForm, setShowAddForm] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    fetchPersonalEntries();
+    }, [location]);
 
 
   const handleDelete = async (number) => {
     try {
         await DeletePersonalEntry(number);
         console.log(`Entry with number ${number} deleted`);
-        setEntries(currentEntries => currentEntries.filter(entry => entry.number !== number));
+        setEntries(entries.filter(entry => entry.number !== number));
+       
     } catch (error) {
         console.error("Error deleting entry:", error);
     }
 };
 
-// useEffect = (() => {  
-//    fetchPersonalEntries();
-// }, []);
 
 
   const onSuccessAddEntry = (newEntry) => {
-    setEntries(currentEntries => [...currentEntries, newEntry]);
+    setEntries([...entries, newEntry]);
 
   }
 

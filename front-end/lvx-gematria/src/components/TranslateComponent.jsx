@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { API } from '../utilities/API'; 
 
 import Container from 'react-bootstrap/esm/Container';
+import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/esm/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
+import ListGroup from 'react-bootstrap/ListGroup';
 import Button from 'react-bootstrap/Button';
 
 function TranslateComponent() {
@@ -42,9 +44,10 @@ function TranslateComponent() {
         <Row className="justify-content-center"> {/* Center content horizontally */}
             <Col md={6}>
                 <Form>
-                    <Form.Group className="mb-3">
+                    <Form.Group style={{color: "whitesmoke"}} className="mb-3">
                         <Form.Label>Text to Translate</Form.Label>
                         <Form.Control 
+                            style={{border: "solid black 1px"}}
                             as="textarea" 
                             value={text} 
                             onChange={e => setText(e.target.value)}
@@ -52,9 +55,11 @@ function TranslateComponent() {
                         />
                     </Form.Group>
 
-                    <Form.Group className="mb-3">
+                    <Form.Group style={{color: "whitesmoke"}}  className="mb-3">
                         <Form.Label>Target Language</Form.Label>
-                        <Form.Select value={destLang} onChange={e => setDestLang(e.target.value)}>
+                        <Form.Select 
+                        style={{border: "solid black 1px"}}
+                        value={destLang} onChange={e => setDestLang(e.target.value)}>
                             {Object.entries(languages).map(([code, name]) => (
                                 <option key={code} value={code}>{name}</option>
                             ))}
@@ -67,9 +72,10 @@ function TranslateComponent() {
                 </Form>
 
                 {translation && (
-                    <div className="mt-4 text-center">
-                        <strong>Translation:</strong> {translation}
-                    </div>
+                    <Card style={{border: "solid black 1px"}} className="mt-4 text-center">
+                        <Card.Title>Translation:</Card.Title>
+                        <Card.Text> {translation}</Card.Text>
+                    </Card>
                 )}
             </Col>
         </Row>

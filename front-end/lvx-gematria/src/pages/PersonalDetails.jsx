@@ -15,7 +15,7 @@ import UpdateEntryForm from '../components/UpdatePersonalEntry';
 function PersonalDetails({ number, onRelatedEntrySelect }) {
   const { entry=null, loading, error, fetchEntry, dispatch } = usePersonalDetails();
   const [ showUpdateForm, setShowUpdateForm] = useState(false)
-  const { fetchPersonalEntries } = usePersonalDictionary();
+  const { fetchPersonalEntries, entries, setEntries } = usePersonalDictionary();
   const navigate = useNavigate();
 
    
@@ -50,7 +50,7 @@ function PersonalDetails({ number, onRelatedEntrySelect }) {
 
   // Handler for the AddEntryForm success
   const handleAddSuccess = (newEntry) => {
-    fetchPersonalEntries()  
+    setEntries([...entries, newEntry])  
     navigate('/personal-dictionary/');
   };
 
