@@ -53,6 +53,11 @@ function PersonalDetails({ number, onRelatedEntrySelect }) {
     setEntries([...entries, newEntry])  
     navigate('/personal-dictionary/');
   };
+  const handleRelatedEntryClick = (relatedNumber) => {
+    if (typeof onRelatedEntrySelect === 'function') {
+      onRelatedEntrySelect(relatedNumber);
+    }
+  };
 
   if (loading) {
     return <div>Loading...</div>;
@@ -71,14 +76,41 @@ function PersonalDetails({ number, onRelatedEntrySelect }) {
     <div className="personal-details" style={{ paddingRight: "5%", width: '40vw', flex: 1 }}>
       <Container>
         <Card style={{ minHeight: '50vh', backgroundColor: "rgba(255, 228, 196, 0.5)" }}>
-          <h2>Personal Entry Details for Number {entry.number}</h2>
-          <p><strong>Description:</strong></p>
+          <Card.Body>
+          <Card.Title>Personal Entry Details for Number {entry.number}</Card.Title>
+         <strong>Description:</strong>
           <ListGroup>
             {entry.personal_description.map((desc, index) => (
               <ListGroup.Item key={index} style={{ backgroundColor: "rgba(255, 228, 196, 0.1)" }}>{desc}</ListGroup.Item>
             ))}
           </ListGroup>
-          {/* Other card contents */}
+          <div style={{ maxHeight: '100px', overflowY: 'auto'}}>
+              <strong>Key Words:</strong>
+              <ListGroup>
+                {entry.personal_key_words.map((keyWord, idx) => (
+                  <ListGroup.Item
+                  style={{ backgroundColor: "rgba(255, 228, 196, 0.1)" }}
+                  key={idx}>{keyWord}
+                  </ListGroup.Item>
+                ))}
+              </ListGroup>
+            </div>
+            <div style={{ maxHeight: '75px', overflowY: 'auto', backgroundColor: "rgba(255, 228, 196, 0.1)" }}>
+              <strong>Related Numbers:</strong>
+              <ListGroup>
+                {entry.personal_related_entries_display.map((relEntry, idx) => (
+                  <ListGroup.Item 
+                    style={{ backgroundColor: "rgba(255, 228, 196, 0.1)" }}
+                    key={idx}
+                    action
+                    onClick={() => handleRelatedEntryClick(relEntry)}
+                  >
+                    Number {relEntry}
+                  </ListGroup.Item>
+                ))}
+              </ListGroup>
+            </div>
+          </Card.Body>
         </Card>
 
         {!showUpdateForm && (
