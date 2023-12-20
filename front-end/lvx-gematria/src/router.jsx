@@ -30,8 +30,12 @@ const router = createBrowserRouter([
             },
             {
                 path: "register/",
-                element: <RegisterPage/>,
-            },
+                element:(
+                        <AnimatedRoute>
+                        <RegisterPage />
+			</AnimatedRoute>
+		)
+	    },
             {
                 path: "global-dictionary/",
                 element: <GlobalDictionary/>,

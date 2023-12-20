@@ -35,11 +35,7 @@ function App() {
 
   return (
     <div>
-    <NavBar user={user} setUser={setUser} />
-    <Container id="welcome">
-      <h3>Welcome {user ? user.email : 'Guest'}</h3>
-	  {/* <TutorialModal />*/}
-    </Container>
+    <NavBar user={user} setUser={setUser} /> 
       <PersonalDictionaryProvider>
 	  <PersonalDetailsProvider>
         <Outlet context={{ user, setUser }} />

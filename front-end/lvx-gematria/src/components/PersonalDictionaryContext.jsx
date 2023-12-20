@@ -19,13 +19,13 @@ export const PersonalDictionaryProvider = ({ children }) => {
     
     try {
         const response = await API.get('dictionary/personal/');
-        setEntries(response.data.results);
-	    console.log(response.data.results)
+            setIsLoading(false)
+	    setEntries(response.data.results);
+	 
     } catch (error) {
         console.error("Error fetching personal dictionary:", error);
         setEntries([]);
-    } finally {
-        setIsLoading(false);
+	setIsLoading(false);
     }
 };
 

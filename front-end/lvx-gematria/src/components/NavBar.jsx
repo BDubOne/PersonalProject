@@ -43,18 +43,28 @@ function NavBar({ user, setUser }) {
                                
                             </>
                         ) : (
+			<>
                             <NavLink as={Link} to="/register/" className="mx-2">Log in / Sign up</NavLink>
+			    <NavLink as={Link} to="/about/" className="mx-2">About</NavLink>
+			</>
                         )}
                     </Nav>
                     
                 </Navbar.Collapse>
-	    	<div style={{ display: 'flex', justifyContent: 'end', marginRight: "2%" }}>
-			<TutorialModal />
-                        <Button onClick={logOut} variant="danger" className="mx-2">
-                                    Log Out
-                        </Button>
-	    	</div>
-            </Container>
+	    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginRight: "2%" }}>
+    		<div style={{ display: 'flex', alignItems: 'center' }}> {/* Row for buttons */}
+        		<TutorialModal />
+        		{user && (
+            			<Button onClick={logOut} variant="danger" className="mx-2">
+                			Log Out
+            			</Button>
+        		)}
+    		</div>
+    		<div style={{ marginTop: '0.5rem' }}> {/* Separate container for the welcome message */}
+        		<span>Welcome, {user ? user.email : 'Guest'}</span>
+    		</div>
+	</div>
+	  </Container>
 	    
         </Navbar>
     );

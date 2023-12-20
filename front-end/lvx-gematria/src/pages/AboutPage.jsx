@@ -2,7 +2,7 @@ import Container from 'react-bootstrap/Container';
 
 function About() {
   return (
-    <Container style={{backgroundColor: "rgba(128, 128, 128, 0.5)",
+    <Container style={{backgroundColor: "rgba(128, 128, 128, 0.8)",
 		    color: "white", 
 		    fontSize: "Large",
    		    display: "flex",

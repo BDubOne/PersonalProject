@@ -15,13 +15,23 @@ import { usePersonalDictionary } from '../components/PersonalDictionaryContext';
 
 function PersonalDictionary() {
   const { entries,setEntries, fetchPersonalEntries } = usePersonalDictionary()
-
+  const [isLoading, setIsLoading] = useState(false);
   const [showAddForm, setShowAddForm] = useState(false);
   const navigate = useNavigate();
   const location = useLocation()
 
   useEffect(() => {
-	  fetchPersonalEntries();
+	  const fetchData = async () => {
+		  setIsLoading(true);
+		  try {
+	 		await fetchPersonalEntries();
+		  } catch (error) {
+			  console.error("error during fetch", error);
+		} finally {
+			setIsLoading(false);
+		}
+	  };
+	  fetchData();
     },[]);
 
 
