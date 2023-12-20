@@ -6,7 +6,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
-
+import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
 import GlobalDetails from './GlobalDetails'
@@ -24,7 +24,7 @@ const CalculatorPage = () => {
   const [loading, setLoading] = useState(false)
   const[selectedNumber, setSelectedNumber] = useState(null)
   const location = useLocation();
-
+  const [showDetails, setShowDetails] = useState(true)
 
   const handleNumberSelect = (number) => {
     setSelectedNumber(number);
@@ -63,6 +63,10 @@ const CalculatorPage = () => {
     calculateAndUpdateSum(e.target.value);
   };
 
+  const toggleDetails = () => {
+    setShowDetails(!showDetails); // Toggle the visibility of database details for number
+  };
+
 
 
   const latinCharacters = Object.fromEntries(
@@ -83,14 +87,21 @@ const CalculatorPage = () => {
 
   return (
     <Container>
-      <TranslateComponent />  
-      <div  id="gematria-details">
+      <TranslateComponent /> 
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+      {showDetails && (
+      <div id="gematria-details">
       {selectedNumber && !isNaN(selectedNumber) && (
             <GlobalDetails number={selectedNumber} onRelatedEntrySelect={handleRelatedEntrySelect} />
-          )}
+      )}
       {selectedNumber && !isNaN(selectedNumber) && (
             <PersonalDetails number={selectedNumber} onRelatedEntrySelect={handleRelatedEntrySelect} />
-          )}
+      )}
+      </div>
+      )}
+      <Button variant="primary" onClick={toggleDetails} style={{marginTop: "1rem"}}>
+      {showDetails ? 'Hide Details' : 'Show Details'}
+      </Button>
       </div>
       <div style={{marginTop: "5rem"}}>     
       <Row className="justify-content-center">
@@ -111,7 +122,7 @@ const CalculatorPage = () => {
               <h5>Sum: {sum}</h5>
             </Card.Body>
           </Card>
-
+	  
           <Row >
             <Col md={4}>
               <LanguageSection languageName="Latin" characters={latinCharacters} onCharacterClick={handleCharacterClick} />
@@ -130,7 +141,9 @@ const CalculatorPage = () => {
           classname="scrollable-container"
           onSelectedNumberChange={handleNumberSelect} />
         </Col>
+	 
       </Row>
+  
       </div> 
     </Container>
   );

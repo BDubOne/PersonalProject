@@ -2,7 +2,18 @@ import Container from 'react-bootstrap/Container';
 
 function About() {
   return (
-    <Container style={{backgroundColor: "rgba(128, 128, 128, 0.5)",color: "white", fontSize: "Large"}}>
+    <Container style={{backgroundColor: "rgba(128, 128, 128, 0.5)",
+		    color: "white", 
+		    fontSize: "Large",
+   		    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    height: "100vh",
+                    overflowY: "auto",
+		    marginTop: "3%",
+		    marginBottom: "3%",
+		    padding: "3%"
+    		}}>
         <div>
       <h2>About LVX Gematria</h2>
       <p>

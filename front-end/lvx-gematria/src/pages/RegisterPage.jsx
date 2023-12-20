@@ -24,7 +24,7 @@ export const RegisterPage = () => {
   }
     return (
       <>
-        <h1>Register Page</h1>
+        <h1 style={{color: "white"}}>Register Page</h1>
         {existingUser && !signupSuccessful ? (
           <>
             <SignUp setUser={setUser} onSignupSuccess={handleSignupSuccess} />

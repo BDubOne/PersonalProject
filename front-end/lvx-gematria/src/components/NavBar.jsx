@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { API } from '../utilities/API';
-
+import TutorialModal from './TutorialModal';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
@@ -22,6 +22,9 @@ function NavBar({ user, setUser }) {
             navigate('/');
         } catch (error) {
             console.error('Logout error:', error);
+	}
+    };
+
 
     return (
         <Navbar style={{paddingBottom: "2%", padding: "2%"}}expand="lg" className="bg-body-tertiary">
@@ -29,7 +32,7 @@ function NavBar({ user, setUser }) {
                 <Navbar.Brand>LVX-Gematria</Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
-                    <Nav className="me-auto">
+                    <Nav style={{ display: 'flex', justifyContent: 'center', width: '100%' }} className="me-auto">
                         <NavLink as={Link} to="/" className="mx-2">Home</NavLink>
                         {user ? (
                             <>
@@ -37,17 +40,22 @@ function NavBar({ user, setUser }) {
                                 <NavLink as={Link} to="/personal-dictionary/" className="mx-2">Personal Dictionary</NavLink>
                                 <NavLink as={Link} to="/lvx-calculator/" className="mx-2">LVX Calculator</NavLink>
                                 <NavLink as={Link} to="/about/" className="mx-2">About</NavLink>
-                                <Button onClick={logOut} variant="danger" className="mx-2">
-                                    Log Out
-                                </Button>
+                               
                             </>
                         ) : (
                             <NavLink as={Link} to="/register/" className="mx-2">Log in / Sign up</NavLink>
                         )}
                     </Nav>
-                    {/* <SearchComponent /> */}
+                    
                 </Navbar.Collapse>
+	    	<div style={{ display: 'flex', justifyContent: 'end', marginRight: "2%" }}>
+			<TutorialModal />
+                        <Button onClick={logOut} variant="danger" className="mx-2">
+                                    Log Out
+                        </Button>
+	    	</div>
             </Container>
+	    
         </Navbar>
     );
 }

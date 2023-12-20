@@ -44,10 +44,18 @@ body {
     background-color: rgba(255, 228, 196, 0.5);
     padding: 1%;
     color: black;
+    height: "32.5rem";
   }
 
+#personal-details, #global-details {
+	width: 40vw;
+	padding-left: 2%;
+	padding-right: 2%;
+	flex: 1;
+}
+
   @media (max-width:768px){
-  .personal-details, .global-details {
+ #personal-details, #global-details {
   
     width:100%;
     padding-right: 0;

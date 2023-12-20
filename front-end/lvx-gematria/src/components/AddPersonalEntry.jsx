@@ -38,7 +38,7 @@ function AddEntryForm(props) {
 
 
             const response = await API.post('dictionary/personal/', formattedData);
-            fetchPersonalEntries();
+            
             if(props.onSuccess) {
             props.onSuccess(formattedData);
             }

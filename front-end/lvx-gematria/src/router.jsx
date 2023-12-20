@@ -10,7 +10,7 @@ import CalculatorPage from "./pages/CalculatorPage";
 
 import About from "./pages/AboutPage";
 
-
+import AnimatedRoute from "./components/AnimatedRoute";
 import { Home } from './pages/Home';
 import { RegisterPage } from "./pages/RegisterPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
@@ -22,8 +22,11 @@ const router = createBrowserRouter([
         children: [
             {
                 index: true,
-                element: <Home />
-
+                element:(
+			<AnimatedRoute>
+			<Home />
+			</AnimatedRoute>
+		)
             },
             {
                 path: "register/",

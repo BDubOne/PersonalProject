@@ -73,7 +73,7 @@ function PersonalDetails({ number, onRelatedEntrySelect }) {
   }
 
   return (
-    <div className="personal-details" style={{ paddingRight: "5%", width: '40vw', flex: 1 }}>
+    <div id="personal-details"> 
       <Container>
         <Card style={{ minHeight: '50vh', backgroundColor: "rgba(255, 228, 196, 0.5)" }}>
           <Card.Body>

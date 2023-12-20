@@ -12,8 +12,7 @@ function GlobalDetails({number, onRelatedEntrySelect }) {
 
   
       const fetchEntry = async () => {
-        const token = localStorage.getItem("userToken");
-        API.defaults.headers.common["Authorization"] = `Token ${token}`;
+
         const response = await API.get(`/dictionary/${number}`);
         setEntry(response.data);
       };
@@ -42,7 +41,7 @@ function GlobalDetails({number, onRelatedEntrySelect }) {
   }
 
   return (
-    <div className="global-details" style={{ paddingRight: "5%", width: '40vw', flex: 1 }}>
+    <div id="global-details">
       <Container>
         <Card style={{ minHeight: '50vh', backgroundColor: "rgba(255, 228, 196, 0.5)" }}>
           <Card.Body>

@@ -37,13 +37,9 @@ export const PersonalDetailsProvider = ({ children, initialNumber }) => {
   const [state, dispatch] = useReducer(personalDetailsReducer, initialState);
 
   const fetchEntry = useCallback(async (number) => {
-    const token = localStorage.getItem("userToken");
-    if (!token) {
-      return;
-    }
 
     dispatch({ type: 'FETCH_START' });
-    API.defaults.headers.common["Authorization"] = `Token ${token}`;
+
 
     try {
       const response = await API.get(`/dictionary/personal/${number}`);

@@ -22,7 +22,7 @@ function SignUp({ onSignupSuccess }) {
                 setPassword('');
             } else {
                 // Handle non-successful responses, if any
-                console.log("Sign up not successful:", response.data);
+                console.log("Sign up not successful:");
                 setError('Sign up not successful. Please try again.');
             }
         } catch (err) {

@@ -17,6 +17,8 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import authenticate
 from .utilities import HttpOnlyTokenAuthentication
+from datetime import datetime, timedelta
+
 
 class SignUp(APIView):
     def post(self, request):

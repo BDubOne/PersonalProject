@@ -45,7 +45,7 @@ class GlobalDictionaryDetail(generics.RetrieveUpdateDestroyAPIView):
 class GlobalDictionaryQuery(generics.ListAPIView):   
     serializer_class = DictionaryEntrySerializer
     permission_classes = [permissions.IsAuthenticated]
-    
+  
 
     def get_queryset(self):
         query = self.kwargs.get('query')
@@ -72,7 +72,7 @@ class GlobalDictionaryQuery(generics.ListAPIView):
 class PersonalDictionaryListCreate(generics.ListCreateAPIView):
     serializer_class = PersonalDictionaryEntrySerializer
     permission_classes = [permissions.IsAuthenticated]
-
+   
 
     def get_queryset(self):
         return PersonalDictionaryEntry.objects.filter(student=self.request.user)
@@ -104,6 +104,7 @@ class PersonalDictionaryQuery(generics.ListAPIView):
     serializer_class = PersonalDictionaryEntrySerializer
     permission_classes = [permissions.IsAuthenticated]
     
+
     # @ratelimit(key=user_or_admin_key, rate='30/h', method="GET", block=True)
     def get_queryset(self):
         query = self.kwargs.get('query')

@@ -19,6 +19,10 @@ function TutorialModal() {
         </Modal.Header>
         <Modal.Body>
           <h5>How to Use LVX Gematria</h5>
+	  <strong>Submit a valid email and password to utilize this site</strong>
+	  <ul>
+	  <li>We will never sell or misuse your data</li>
+	  </ul>
           <strong>Global Dictionary</strong>
           <ul>
             <li>Browse through the gematria work of Dr. Paul Foster Case.</li>

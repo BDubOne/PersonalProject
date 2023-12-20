@@ -38,13 +38,14 @@ function App() {
     <NavBar user={user} setUser={setUser} />
     <Container id="welcome">
       <h3>Welcome {user ? user.email : 'Guest'}</h3>
-      <TutorialModal />
+	  {/* <TutorialModal />*/}
     </Container>
-    <PersonalDetailsProvider>
       <PersonalDictionaryProvider>
+	  <PersonalDetailsProvider>
         <Outlet context={{ user, setUser }} />
+	  </PersonalDetailsProvider>
       </PersonalDictionaryProvider>
-    </PersonalDetailsProvider>
+    
   </div>
 );
 }

@@ -12,13 +12,13 @@ function LogIn() {
     const navigate = useNavigate();
 
 const handleSubmit = async (e) => {
-    console.log(email, password);
+
     e.preventDefault();
     try {
         const response = await API.post('users/login/', { email, password });
-        if (response.data.student) { // Assuming the key is 'student' in your response
+        if (response.data.student) {
             setUser(response.data.student); // Set the user state
-            console.log(`Login successful,${response.data.student}`);
+
             navigate("/");
         } else {
             alert("Login failed. Please check your credentials.");

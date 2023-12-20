@@ -20,13 +20,16 @@ function GlobalDictionary() {
   const [globalResults, setGlobalResults] = useState([]);
   const [personalResults, setPersonalResults] = useState([]);  
   const [isSearching, setIsSearching] = useState(false);
+  const [currentGlobalQueryPage, setCurrentGlobalQueryPage] = useState(1);
+  const [totalGlobalQueryPages, setTotalGlobalQueryPages] = useState(0);
 
+  const [currentPersonalQueryPage, setCurrentPersonalQueryPage] = useState(1);
+  const [totalPersonalQueryPages, setTotalPersonalQueryPages] = useState(0);
 
 
  
   const fetchEntries = async () => {
-    const token = localStorage.getItem("userToken");        
-    API.defaults.headers.common["Authorization"] = `Token ${token}`;
+
     try {
       const response = await API.get('/dictionary/', { params: { page: currentPage } });
       if (response.data && response.data.results) {
@@ -54,7 +57,8 @@ function GlobalDictionary() {
   const handlePreviousPage = () => {
     setCurrentPage(current => current - 1);
   };
-  const fetchResults = async (queryParam) => {
+ 
+const fetchResults = async (queryParam) => {
     // Initialize variables to hold response data
     let globalData = [];
     let personalData = [];
@@ -116,7 +120,7 @@ function GlobalDictionary() {
       {isSearching ? (
         // Render search results
         <>
-          <h2>Global Dictionary Results</h2>
+          <h2 style={{color: "white"}}>Global Dictionary Results</h2>
           <Row className="query-results">
             
             {globalResults.map(entry => (
@@ -129,13 +133,13 @@ function GlobalDictionary() {
           />
             ))}
           </Row>
-          <h2>Personal Dictionary Results</h2>
+          <h2 style={{color: "white"}}>Personal Dictionary Results</h2>
           <Row className="query-results">
             {personalResults.map(entry => (
               <NumberCard
               key={entry.id}
               number={entry.number}
-              descriptionItem={entry.description && entry.description.length > 0 ? entry.description[0] : 'No description available.'}
+              descriptionItem={entry.description? entry.description[0] : 'No description available.'}
               relatedWords={entry.key_words}
               dictionaryType="personal"
               />

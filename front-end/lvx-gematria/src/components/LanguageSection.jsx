@@ -7,7 +7,7 @@ import Form from 'react-bootstrap/Form';
 
 export const LanguageSection = ({ languageName, characters, onCharacterClick }) => {
     return (
-      <Card style={{height: "30rem",backgroundColor: "rgba(255, 228, 196, 0.5)"}}>
+      <Card style={{height: "32.5rem",backgroundColor: "rgba(255, 228, 196, 0.5)"}}>
         <Card.Header style = {{backgroundColor: "rgba(255, 228, 196, 0.1)"}}>{languageName}</Card.Header>
         <Card.Body style = {{backgroundColor: "rgba(255, 228, 196, 0.1)"}}>
           {Object.keys(characters).map((char, index) => (

@@ -10,7 +10,7 @@ function NumberCard({ number, descriptionItem, keyWords }) {
   const navigateToDetails = () => {
     const path = '/lvx-calculator/';
 
-    if (number) {
+    if (number !== null && number !== undefined){
         navigate(path, { state: { selectedNumber: number } });
     } else {
         console.error("Invalid number for navigation:");
@@ -25,16 +25,18 @@ const displayKeywords = keywordsArray.join(", ");
 
   return (
     <Card style={{ border: '1px black solid',width: '15rem', height: '15rem', padding: '2%', margin:"3%", backgroundColor: "rgba(255, 228, 196, 0.5)" }}>
-      <Card.Body>
+      <Card.Body style={{ padding: '2%', height: 'calc(100% - 2rem)' }} >
         <Card.Title>Number {number}</Card.Title>
         <Card.Text>
           {descriptionItem}
           <br />
           Keywords: {displayKeywords}
         </Card.Text>
+      <div style={{ position: 'absolute', bottom: '2%', right: '2%' }}> {/* Positioning the button */}
         <Button variant="primary" onClick={navigateToDetails}>
           View Details
         </Button>
+      </div>
       </Card.Body>
     </Card>
   );

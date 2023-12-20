@@ -42,8 +42,6 @@ function UpdateEntryForm({ entryNumber, onUpdate }) {
         };
     
         try {
-            const token = localStorage.getItem("userToken");
-            API.defaults.headers.common["Authorization"] = `Token ${token}`;
     
             const response = await API.put(`dictionary/personal/${entryNumber}/`, formattedData);
             console.log("Entry updated:", response.data);

@@ -69,7 +69,7 @@ class PersonalDictionaryEntry(models.Model):
 
     class Meta:
         unique_together = ('student', 'number')
-
+        ordering = ['number']
     def __str__(self):
         return f'Personal entry for {self.student.email} Number {self.number}'
 
