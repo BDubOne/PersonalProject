@@ -1,7 +1,7 @@
 import { CSSTransition } from 'react-transition-group';
 import '../transitions.css'; 
 
-const AnimatedRoute = ({ children, timeout = 300, classNames = "fade" }) => {
+const AnimatedRoute = ({ children, timeout = 300, classNames = "fade-enter-active" }) => {
   return (
     <CSSTransition in appear timeout={timeout} classNames={classNames} unmountOnExit>
       {children}

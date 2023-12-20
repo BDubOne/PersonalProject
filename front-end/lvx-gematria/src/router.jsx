@@ -26,7 +26,7 @@ const router = createBrowserRouter([
 			<AnimatedRoute>
 			<Home />
 			</AnimatedRoute>
-		)
+		),
             },
             {
                 path: "register/",
@@ -34,26 +34,23 @@ const router = createBrowserRouter([
                         <AnimatedRoute>
                         <RegisterPage />
 			</AnimatedRoute>
-		)
+		),
 	    },
             {
                 path: "global-dictionary/",
-                element: <GlobalDictionary/>,
-            },
-            {
-                path: "global-dictionary/:number",
-                element: <GlobalDetails/>,
-            },
+                element:(
+                        <AnimatedRoute>
+                        <GlobalDictionary />
+                        </AnimatedRoute>
+                ),
+	    },
+         
             {
                 path: "personal-dictionary/",
                 element: <PersonalDictionary />,
 
             },
-            {
-                path: "personal-dictionary/:number",
-                element: <PersonalDetails />,
-
-            },
+         
             {
                 path: "lvx-calculator/",
                 element: <CalculatorPage />,

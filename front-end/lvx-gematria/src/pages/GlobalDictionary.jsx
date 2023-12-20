@@ -163,7 +163,7 @@ const fetchResults = async (queryParam) => {
       </Row>
       <div className="d-flex justify-content-between align-items-center mt-3">
         <Button onClick={handlePreviousPage} disabled={currentPage <= 1}>Previous</Button>
-        <span> Page {currentPage} of {totalPages} </span>
+        <span> Page {currentPage} </span>
         <Button onClick={handleNextPage} disabled={currentPage >= totalPages}>Next</Button>
       </div>
       </>
