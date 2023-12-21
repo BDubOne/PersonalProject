@@ -50,19 +50,8 @@ export const IntroCarousel=() => {
             src={Slide5}
             alt="Second slide"
           />
-        </Carousel.Item><Carousel.Item>
-          <img
-            className="d-block w-100"
-            src={Slide7}
-            alt="Second slide"
-          />
-        </Carousel.Item><Carousel.Item>
-          <img
-            className="d-block w-100"
-            src={Slide8}
-            alt="Second slide"
-          />
-        </Carousel.Item><Carousel.Item>
+        </Carousel.Item>
+          <Carousel.Item>
           <img
             className="d-block w-100"
             src={Slide10}
