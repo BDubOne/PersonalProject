@@ -51,6 +51,7 @@ Thank you for being a part of this journey. I am excited to see where it takes u
 
 `CODE PLATOON`
 
-    @adamcee
+  <a href="https://github.com/fravila08">@fravila08</a>
+  <a href="https://github.com/adamcee">@adamcee</a>
 
-    @fravila08
+    
