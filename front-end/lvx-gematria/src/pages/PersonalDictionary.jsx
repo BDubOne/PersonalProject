@@ -5,6 +5,8 @@ import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Modal from 'react-bootstrap/Modal';
+
 
 import NumberCard from '../components/NumberCard';
 import { API } from '../utilities/API';
@@ -17,9 +19,11 @@ function PersonalDictionary() {
   const { entries,setEntries, fetchPersonalEntries } = usePersonalDictionary()
   const [isLoading, setIsLoading] = useState(false);
   const [showAddForm, setShowAddForm] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [showErrorModal, setShowErrorModal] = useState(false);
   const navigate = useNavigate();
   const location = useLocation()
-
+  
   useEffect(() => {
 	  const fetchData = async () => {
 		  setIsLoading(true);
@@ -41,8 +45,12 @@ function PersonalDictionary() {
         console.log(`Entry with number ${number} deleted`);
         setEntries(entries.filter(entry => entry.number !== number));
        
-    } catch (error) {
-        console.error("Error deleting entry:", error);
+    } catch {
+	    if (error.response && error.response.status === 404) {
+		setErrorMessage('This item has already been removed, but the page hasn\'t had time to catch up.');
+	 	setShowErrorModal(true);
+	   } else {
+        console.error("Error fetching data:", error);
     }
   };
 
@@ -100,6 +108,17 @@ function PersonalDictionary() {
         </>
       )}
     </div>
+	  <Modal show={showErrorModal} onHide={() => setShowErrorModal(false)}>
+      <Modal.Header closeButton>
+        <Modal.Title>Error</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>{errorMessage}</Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={() => setShowErrorModal(false)}>
+          Close
+        </Button>
+      </Modal.Footer>
+    </Modal>
     <div className="overflow-auto" style={{ maxHeight: 'calc(5 * 18rem)' }}>
       {entries ? renderEntries() : <p>No entries found.</p>}
     </div>
