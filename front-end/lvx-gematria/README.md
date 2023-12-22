@@ -1,5 +1,5 @@
 <h1>LVX Gematria</h1>
-`A bridge between mental order and creative chaos`
+<emph></emph>A bridge between mental order and creative chaos</emph>
 
 Welcome to LVX Gematria, a project born from a deep passion for the intersection of meditation, analysis, and the mystical practice of Gematria.
 
