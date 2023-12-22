@@ -32,7 +32,7 @@ function About() {
       <p>
         To me, Gematria is not just a method of interpreting numbers and words. It is a 
         bridge that connects the analytical mind with the profound depths of meditation. 
-        It allows me to link ideas and insights, tapping into the full power of my 
+        It allows me to link ideas and insights, tapping into the power of my 
         subconscious. Through Gematria, I find a unique harmony between logic and 
         intuition, between the known and the mystical.
       </p>
