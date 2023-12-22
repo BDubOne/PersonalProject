@@ -1,4 +1,4 @@
-<h1>LVX Gematria</h1>
+<h1><a href="https://lvx-gematria.com">LVX Gematria</a></h1>
 <emph></emph>A bridge between mental order and creative chaos</emph>
 
 Welcome to LVX Gematria, a project born from a deep passion for the intersection of meditation, analysis, and the mystical practice of Gematria.
