@@ -7,3 +7,4 @@ __pycache__
 .plans
 .research
 .ssh
+.DS_Store
