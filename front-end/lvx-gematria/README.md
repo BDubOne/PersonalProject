@@ -49,8 +49,8 @@ Thank you for being a part of this journey. I am excited to see where it takes u
 
 <h2>SHOUTOUTS</h2>
 
-<a href="https://www.codeplatoon.org"><h3>Code Platoon</h3></a>
-`CODE PLATOON`
+<h3><a href="https://www.codeplatoon.org">Code Platoon</a></h3>
+
 
   <a href="https://github.com/fravila08">@fravila08</a>
   <a href="https://github.com/adamcee">@adamcee</a>
