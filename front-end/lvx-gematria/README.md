@@ -35,10 +35,14 @@ Thank you for being a part of this journey. I am excited to see where it takes u
     React + Vite
   </li>
 </ul>
+
 #style
+
 `BOOTSTRAP`
 
 ##SHOUTOUTS
-CODE PLATOON
+
+`CODE PLATOON`
+
 @adamcee
 @fravila08
